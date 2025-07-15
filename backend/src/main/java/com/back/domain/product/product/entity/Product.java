@@ -10,18 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Product extends BaseEntity {
     private String name;
-    private String eng_name;
+    private String engName;
     private String info;
     private int price;
     private String image_url;
 
     // 생성자
-    public Product(String name, String image_url, String info, int price, String eng_name) {
+    public Product(String name, String image_url, String info, int price, String engName) {
         this.name = name;
         this.image_url = image_url;
         this.info = info;
         this.price = price;
-        this.eng_name = eng_name;
+        this.engName = engName;
     }
 
     // 수정 -> 서비스
@@ -30,7 +30,7 @@ public class Product extends BaseEntity {
         this.image_url = image_url;
         this.info = info;
         this.price = price;
-        this.eng_name = eng_name;
+        this.engName = eng_name;
     }
 }
 
