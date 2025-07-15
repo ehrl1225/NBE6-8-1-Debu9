@@ -57,6 +57,6 @@ const ProdList = () => {
   );
 };
 
-export default function () {
+export default function page() {
   return <ProdList />;
 }
