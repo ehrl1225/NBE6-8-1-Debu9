@@ -42,14 +42,17 @@ const dummyProducts: Product[] = [
 const ProdList = () => {
   return (
     <>
-      <ul>
+      <ul className="mt-15 px-25 divide-y divide-gray-300">
         {dummyProducts.map((prod) => (
-          <li key={prod.id}>
-            <img src={prod.imageUrl} width={80} height={80} />
-            <p className="text-sm font-bold">{prod.name}</p>
-            <p className="text-sm font-thin">{prod.engName}</p>
-            <br />
-            <p className="text-xs">{prod.price}원</p>
+          <li key={prod.id} className="flex gap-8">
+            <img src={prod.imageUrl} width={120} height={120} />
+
+            <div className="mt-6">
+              <p className="text-sm font-bold">{prod.name}</p>
+              <p className="text-sm font-thin">{prod.engName}</p>
+              <br />
+              <p className="text-xs">{prod.price}원</p>
+            </div>
           </li>
         ))}
       </ul>
