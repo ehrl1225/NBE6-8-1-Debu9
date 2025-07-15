@@ -3,6 +3,7 @@ import React from "react";
 type Product = {
   id: number;
   name: string;
+  engName: string;
   price: number;
   imageUrl: string;
 };
@@ -11,42 +12,51 @@ const dummyProducts: Product[] = [
   {
     id: 1,
     name: "스타버구 블렌드1",
+    engName: "Starbu9 Blend1",
     price: 20000,
     imageUrl: "/images/starbu9_blend1.png",
   },
   {
-    id: 1,
-    name: "스타버구 블렌드1",
+    id: 2,
+    name: "스타버구 블렌드2",
+    engName: "Starbu9 Blend2",
     price: 20000,
     imageUrl: "/images/starbu9_blend2.png",
   },
   {
-    id: 1,
-    name: "스타버구 블렌드1",
+    id: 3,
+    name: "스타버구 블렌드3",
+    engName: "Starbu9 Blend3",
     price: 20000,
     imageUrl: "/images/starbu9_blend3.png",
   },
   {
-    id: 1,
-    name: "스타버구 블렌드1",
+    id: 4,
+    name: "스타버구 블렌드4",
+    engName: "Starbu9 Blend4",
     price: 20000,
     imageUrl: "/images/starbu9_blend4.png",
   },
 ];
-export default function () {
+
+const ProdList = () => {
   return (
     <>
       <ul>
         {dummyProducts.map((prod) => (
           <li key={prod.id}>
-            <img src={prod.imageUrl} />
+            <img src={prod.imageUrl} width={80} height={80} />
+            <p className="text-sm font-bold">{prod.name}</p>
+            <p className="text-sm font-thin">{prod.engName}</p>
             <br />
-            {prod.name}
-            <br />
-            {prod.price}원
+            <p className="text-xs">{prod.price}원</p>
           </li>
         ))}
       </ul>
     </>
   );
+};
+
+export default function () {
+  return <ProdList />;
 }
