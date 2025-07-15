@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 
 type Product = {
   id: number;
@@ -6,6 +7,7 @@ type Product = {
   engName: string;
   price: number;
   imageUrl: string;
+  description: string;
 };
 
 const dummyProducts: Product[] = [
@@ -15,6 +17,7 @@ const dummyProducts: Product[] = [
     engName: "Starbu9 Blend1",
     price: 20000,
     imageUrl: "/images/starbu9_blend1.png",
+    description: "깊은 향과 풍부한 맛의 블렌드",
   },
   {
     id: 2,
@@ -22,6 +25,7 @@ const dummyProducts: Product[] = [
     engName: "Starbu9 Blend2",
     price: 20000,
     imageUrl: "/images/starbu9_blend2.png",
+    description: "밝고 산뜻한 풍미의 블렌드",
   },
   {
     id: 3,
@@ -29,6 +33,7 @@ const dummyProducts: Product[] = [
     engName: "Starbu9 Blend3",
     price: 20000,
     imageUrl: "/images/starbu9_blend3.png",
+    description: "어쩌구 저쩌구",
   },
   {
     id: 4,
@@ -36,26 +41,55 @@ const dummyProducts: Product[] = [
     engName: "Starbu9 Blend4",
     price: 20000,
     imageUrl: "/images/starbu9_blend4.png",
+    description: "저쩌구 어쩌구",
   },
 ];
 
 const ProdList = () => {
+  const [selectedProd, setSelectedProd] = useState<Product | null>(null);
+
   return (
     <>
-      <ul className="mt-15 px-25 divide-y divide-gray-300">
-        {dummyProducts.map((prod) => (
-          <li key={prod.id} className="flex gap-8">
-            <img src={prod.imageUrl} width={120} height={120} />
+      <div className="relative">
+        <ul className="mt-15 px-25 divide-y divide-gray-300">
+          {dummyProducts.map((prod) => (
+            <li
+              key={prod.id}
+              className="flex gap-8 cursor-pointer hover:opacity-60"
+              onClick={() => setSelectedProd(prod)}
+            >
+              <img src={prod.imageUrl} width={120} height={120} />
 
-            <div className="mt-6">
-              <p className="text-sm font-bold">{prod.name}</p>
-              <p className="text-sm font-thin">{prod.engName}</p>
+              <div className="mt-6">
+                <p className="text-sm font-bold">{prod.name}</p>
+                <p className="text-sm font-thin">{prod.engName}</p>
+                <br />
+                <p className="text-xs">{prod.price}원</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        {selectedProd && (
+          <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white">
+            <button
+              className="bg-black text-white p-2 rounded"
+              onClick={() => setSelectedProd(null)}
+            >
+              X 닫기
+            </button>
+
+            <div>
+              <img src={selectedProd.imageUrl} />
+              <p className="text-sm font-bold">{selectedProd.name}</p>
+              <p className="text-sm font-thin">{selectedProd.engName}</p>
               <br />
-              <p className="text-xs">{prod.price}원</p>
+              <p className="text-xs">{selectedProd.price}원</p>
+              <p>{selectedProd.description}</p>
             </div>
-          </li>
-        ))}
-      </ul>
+          </div>
+        )}
+      </div>
+      ;
     </>
   );
 };
