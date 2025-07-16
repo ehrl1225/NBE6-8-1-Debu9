@@ -43,7 +43,7 @@ public class ProductController {
         return new ProductDto(product);
     }
 
-    record ProductCreateReqBody(
+    record ProductReqBody(
             @NotBlank @Size(min = 1, max = 100)
             String name,
             @NotBlank
@@ -56,10 +56,11 @@ public class ProductController {
             String engName
     ) {}
 
+
     @PostMapping
     @Transactional
     @Operation(summary = "상품 추가")
-    public RsData<ProductDto> createProduct(@Valid @RequestBody ProductCreateReqBody reqBody) {
+    public RsData<ProductDto> createProduct(@Valid @RequestBody ProductReqBody reqBody) {
         Product product = productService.create(reqBody.name, reqBody.imageUrl, reqBody.info, reqBody.price, reqBody.engName);
 
         return new RsData<>(
@@ -69,28 +70,13 @@ public class ProductController {
         );
     }
 
-    record ProductModifyReqbody(
-
-            @NotBlank @Size(min = 1, max = 100)
-            String name,
-            @NotBlank
-            String imageUrl,
-            @NotBlank
-            String info,
-            @NotNull
-            Integer price,
-            @NotBlank
-            String engName
-    ) {
-    }
-
 
     @PutMapping("/{id}")
     @Transactional
     @Operation(summary = "상품 수정")
     public RsData<Void> updateProduct(
             @PathVariable int id,
-            @Valid @RequestBody ProductModifyReqbody reqBody
+            @Valid @RequestBody ProductReqBody reqBody
     ) {
         Product product = productService.findById(id).get();
         productService.modify(product, reqBody.name, reqBody.imageUrl, reqBody.info, reqBody.price, reqBody.engName);
