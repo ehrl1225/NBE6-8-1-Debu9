@@ -11,6 +11,7 @@ public record ProductDto (
         String name,
         String engName,
         int price,
+        String info,
         String imageUrl
 )
 {
@@ -22,7 +23,8 @@ public ProductDto(Product product) {
                 product.getName(),
                 product.getEngName(),
                 product.getPrice(),
-                product.getImage_url()
+                product.getInfo(),
+                product.getImageUrl()
         );
     }
 }
