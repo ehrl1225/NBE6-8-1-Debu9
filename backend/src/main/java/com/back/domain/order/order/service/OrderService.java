@@ -30,5 +30,12 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public boolean delete(int id) {
+        if (orderRepository.existsById(id)) {
+            orderRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 
 }
