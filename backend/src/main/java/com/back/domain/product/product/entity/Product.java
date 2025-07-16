@@ -16,7 +16,7 @@ public class Product extends BaseEntity {
     private String image_url;
 
     // 생성자
-    public Product(String name, String image_url, String info, int price, String eng_name) {
+    public Product(String name, String image_url, int price) {
         this.name = name;
         this.image_url = image_url;
         this.info = info;
@@ -32,5 +32,12 @@ public class Product extends BaseEntity {
         this.price = price;
         this.eng_name = eng_name;
     }
+
+    // Getter 메서드
+    public String getName() { return name; }
+    public String getEng_name() { return eng_name; }
+    public String getInfo() { return info; }
+    public int getPrice() { return price; }
+    public String getImage_url() { return image_url; }
 }
 
