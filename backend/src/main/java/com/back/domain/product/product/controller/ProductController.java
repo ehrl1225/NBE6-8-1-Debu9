@@ -35,6 +35,39 @@ public class ProductController {
                 .toList();
     }
 
+    @GetMapping("/{id}")
+    @Transactional(readOnly = true)
+    @Operation(summary = "단건 조회")
+    public ProductDto getItem(@PathVariable int id) {
+        Product product = productService.findById(id).get();
+        return new ProductDto(product);
+    }
+
+    record ProductCreateReqBody(
+            @NotBlank @Size(min = 1, max = 100)
+            String name,
+            @NotBlank
+            String imageUrl,
+            @NotBlank
+            String info,
+            @NotNull
+            Integer price,
+            @NotBlank
+            String engName
+    ) {}
+
+    @PostMapping
+    @Transactional
+    @Operation(summary = "상품 추가")
+    public RsData<ProductDto> createProduct(@Valid @RequestBody ProductCreateReqBody reqBody) {
+        Product product = productService.create(reqBody.name, reqBody.imageUrl, reqBody.info, reqBody.price, reqBody.engName);
+
+        return new RsData<>(
+                "200-1",
+                "상품이 추가되었습니다.",
+                new ProductDto(product)
+        );
+    }
 
     record ProductModifyReqbody(
 
