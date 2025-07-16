@@ -34,6 +34,7 @@ public class OrderController {
                 .toList();
     }
 
+    // id로 조회
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "주문 단건 조회")
@@ -42,8 +43,6 @@ public class OrderController {
 
         return new OrderDto(order);
     }
-
-
 
     record OrderWriteReqBody(
             @NotNull
