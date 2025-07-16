@@ -1,136 +1,165 @@
 "use client";
-import { Product } from "../type/product";
+import { CartItem } from "../type/cartItem";
+import { useState } from "react";
 import { dummyCartItems } from "../data/dummydata";
-
-const total_price = dummyCartItems.reduce(
-  (sum, item) => sum + item.product.price * item.quantity,
-  0
-);
-
-const total_item = dummyCartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-const ShoppingCart = () => {
+const ShoppingCart = ({
+  selectedItems,
+  selectedMap,
+  isAllChecked,
+  checkboxChange,
+  allCheck,
+  selectedDelete,
+}: {
+  selectedItems: CartItem[];
+  selectedMap: { [key: number]: boolean };
+  isAllChecked: boolean;
+  checkboxChange: (id: number) => void;
+  allCheck: () => void;
+  selectedDelete: () => void;
+}) => {
   return (
-    <>
-      <div className="bg-white">
-        <input type="checkbox" />
+    <div className="bg-white p-4 w-1/2">
+      <div className="flex items-center gap-2 mb-4">
+        <input type="checkbox" checked={isAllChecked} onChange={allCheck} />
         <span className="text-sm">전체 선택</span>
-        <button className="cursor-pointer border border-gray-300 text-sm py-1 px-3 rounded-xl">
+        <button
+          onClick={selectedDelete}
+          className="cursor-pointer border border-gray-300 text-sm py-1 px-3 rounded-xl"
+        >
           선택 삭제
         </button>
-        <ul>
-          {dummyCartItems.map((item) => {
-            return (
-              <>
-                <li key={item.product.id} className="flex gap-10">
-                  <input type="checkbox" />
-                  <img src={item.product.imageUrl} />
-                  <div className="mt-6">
-                    <p className="text-sm font-bold">{item.product.name}</p>
-                    <p className="text-sm font-thin">{item.product.engName}</p>
-                    <br />
-                    <p className="text-xs">
-                      {item.quantity}개/{item.product.price * item.quantity}원
-                    </p>
-                    <button className="cursor-pointer border border-gray-300 text-sm py-1 px-3 rounded-xl">
-                      수량 수정
-                    </button>
-                  </div>
-                </li>
-              </>
-            );
-          })}
-        </ul>
       </div>
-    </>
+
+      <ul className="flex flex-col gap-4">
+        {selectedItems.map((item) => (
+          <li key={item.product.id} className="flex gap-4 items-start">
+            <input
+              type="checkbox"
+              checked={!!selectedMap[item.product.id]}
+              onChange={() => checkboxChange(item.product.id)}
+            />
+            <img
+              src={item.product.imageUrl}
+              className="w-24 h-24 object-cover"
+            />
+            <div>
+              <p className="text-sm font-bold">{item.product.name}</p>
+              <p className="text-sm text-gray-500">{item.product.engName}</p>
+              <p className="text-xs mt-1">
+                {item.quantity}개 / {item.product.price * item.quantity}원
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+const Order = ({
+  total_price,
+  total_item,
+}: {
+  total_price: number;
+  total_item: number;
+}) => {
+  return (
+    <div className="bg-white p-4 w-1/2 flex flex-col gap-8">
+      <OrderSummary total_price={total_price} />
+      <UserInfo total_price={total_price} total_item={total_item} />
+    </div>
   );
 };
 
-/*const Order = () => {
+const OrderSummary = ({ total_price }: { total_price: number }) => {
   return (
-    <>
-      <div>
-        <div className="w-full flex flex-col items-start gap-8 border-b border-b-gray-300 pb-8 mt-10">
-          <p className="text-2xl">구매 금액</p>
-          <div className="flex gap-50">
-            <div className="flex flex-col gap-3">
-              <p>상품 금액</p>
-              <p>배송비</p>
-            </div>
-            <div className="flex flex-col gap-3 items-end">
-              <p>{total_price}</p>
-              <p>무료배송</p>
-            </div>
-          </div>
-        </div>
-      <OrderSummary />
-      <UserInfo />
-      <div className="w-full flex flex-col items-start mt-10">
-        <div className="flex flex-col gap-3">
-          <p className="text-2xl pb-8">구매자 정보</p>
-          <label>이메일</label>
-          <input
-            placeholder="email"
-            className="border border-gray-300 pl-10 p-2 rounded-lg 
-              bg-white bg-[url('/images/email.png')] bg-no-repeat bg-[length:18px_18px] bg-[position:10px_center]"
-          />
-          <label>주소</label>
-          <input
-            placeholder="address"
-            className="border border-gray-300 pl-10 p-2 rounded-lg
-              bg-white bg-[url('/images/address.png')] bg-no-repeat bg-[length:18px_18px] bg-[position:10px_center]"
-          />
-          <button className="p-2 mt-8 px-5 bg-[#005034] text-white rounded-xl">
-            {total_price}원 결제하기({total_item}개)
-          </button>
-        </div>
-      </div>
-    </>
-  );
-};*/
-
-const OrderSummary = () => {
-  return (
-    <>
-      <div>
-        <p>구매 금액</p>
-        <p>상품 금액</p>
-        <p>{total_price}</p>
-        <p>배송비</p>
-        <p>무료배송</p>
-      </div>
-    </>
+    <div>
+      <p className="text-xl font-semibold">구매 금액</p>
+      <p>상품 금액: {total_price}원</p>
+      <p>배송비: 무료</p>
+    </div>
   );
 };
-const UserInfo = () => {
+
+const UserInfo = ({
+  total_price,
+  total_item,
+}: {
+  total_price: number;
+  total_item: number;
+}) => {
   return (
-    <>
-      <p>구매자 정보</p>
+    <div>
+      <p className="text-xl font-semibold">구매자 정보</p>
       <label>이메일</label>
       <input placeholder="email" />
       <label>주소</label>
       <input placeholder="address" />
-      <button>
-        {total_price}원 결제하기({total_item}개)
+      <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+        {total_price}원 결제하기 ({total_item}개)
       </button>
-    </>
+    </div>
   );
 };
-const Order = () => {
-  return (
-    <>
-      <OrderSummary />
-      <UserInfo />
-    </>
-  );
-};
+
 export default function Page() {
+  const [selectedItems, setSelectedItems] =
+    useState<CartItem[]>(dummyCartItems);
+  const [selectedMap, setSelectedMap] = useState<{ [key: number]: boolean }>(
+    {}
+  );
+  const [isAllChecked, setIsAllChecked] = useState(false);
+
+  const checkboxChange = (id: number) => {
+    setSelectedMap((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const allCheck = () => {
+    const newCheckState: { [key: number]: boolean } = {};
+    selectedItems.forEach((item) => {
+      newCheckState[item.product.id] = !isAllChecked;
+    });
+    setSelectedMap(newCheckState);
+    setIsAllChecked(!isAllChecked);
+  };
+
+  const selectedDelete = () => {
+    const filtered = selectedItems.filter(
+      (item) => !selectedMap[item.product.id]
+    );
+    setSelectedItems(filtered);
+
+    // 체크 상태도 초기화
+    const newMap = { ...selectedMap };
+    selectedItems.forEach((item) => {
+      if (selectedMap[item.product.id]) {
+        delete newMap[item.product.id];
+      }
+    });
+    setSelectedMap(newMap);
+    setIsAllChecked(false);
+  };
+
+  const total_price = selectedItems.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+
+  const total_item = selectedItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+
   return (
-    <>
-      <div className="h-full bg-blue-200 flex border border-2 border-red-500">
-        <ShoppingCart />
-        <Order />
-      </div>
-    </>
+    <div className="h-screen bg-blue-200 flex gap-8 p-4">
+      <ShoppingCart
+        selectedItems={selectedItems}
+        selectedMap={selectedMap}
+        isAllChecked={isAllChecked}
+        checkboxChange={checkboxChange}
+        allCheck={allCheck}
+        selectedDelete={selectedDelete}
+      />
+      <Order total_price={total_price} total_item={total_item} />
+    </div>
   );
 }
