@@ -39,8 +39,7 @@ public class ProductController {
     @Transactional(readOnly = true)
     @Operation(summary = "단건 조회")
     public ProductDto getItem(@PathVariable int id) {
-        Product product = productService.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 상품을 찾을 수 없습니다. id = " + id));
+        Product product = productService.findById(id).get();
         return new ProductDto(product);
     }
 
