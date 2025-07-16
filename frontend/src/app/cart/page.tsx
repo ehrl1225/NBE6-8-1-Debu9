@@ -3,14 +3,17 @@ export default function page() {
     <>
       <div className="flex h-screen bg-[#F9F9F2]">
         <div className="w-[60%] h-full">
-          <div className="bg-white m-20">
-            <input type="checkbox" className="w-4 h-4" />
-            <span className="text-sm">전체 선택</span>
-            <button className="text-xs cursor-pointer border border-gray-300 px-3 py-1 rounded-xl">
-              선택 삭제
-            </button>
+          <div className="bg-white m-20 p-8">
+            <div className="flex items-center">
+              <input type="checkbox" className="w-4 h-4" />
+              <p className="text-sm ml-2">전체 선택</p>
+              <button className="text-xs ml-100 cursor-pointer border border-gray-300 px-3 py-1 rounded-xl">
+                선택 삭제
+              </button>
+            </div>
             <ul className="flex flex-col">
-              <div className="flex">
+              <div className="flex border-b border-b-gray mx-5">
+                <input type="checkbox" />
                 <img src="/images/starbu9_blend1.png"></img>
                 <div className="mt-6">
                   <p className="text-sm font-bold">스타버구 블렌드1</p>
@@ -23,7 +26,8 @@ export default function page() {
                 </div>
               </div>
 
-              <div className="flex">
+              <div className="flex mx-5">
+                <input type="checkbox" />
                 <img src="/images/starbu9_blend2.png"></img>
                 <div className="mt-6">
                   <p className="text-sm font-bold">스타버구 블렌드2</p>
