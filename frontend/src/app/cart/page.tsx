@@ -2,7 +2,42 @@ export default function page() {
   return (
     <>
       <div className="flex h-screen bg-[#F9F9F2]">
-        <div className="w-[60%] h-full"></div>
+        <div className="w-[60%] h-full">
+          <div className="bg-white m-20">
+            <input type="checkbox" className="w-4 h-4" />
+            <span className="text-sm">전체 선택</span>
+            <button className="text-xs cursor-pointer border border-gray-300 px-3 py-1 rounded-xl">
+              선택 삭제
+            </button>
+            <ul className="flex flex-col">
+              <div className="flex">
+                <img src="/images/starbu9_blend1.png"></img>
+                <div className="mt-6">
+                  <p className="text-sm font-bold">스타버구 블렌드1</p>
+                  <p className="text-sm font-thin">StarBu9 Blend1</p>
+                  <br />
+                  <p className="text-xs">1개/20,000원</p>
+                  <button className="cursor-pointer border border-gray-300 text-xs py-1 px-3 rounded-xl">
+                    수량 변경
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex">
+                <img src="/images/starbu9_blend2.png"></img>
+                <div className="mt-6">
+                  <p className="text-sm font-bold">스타버구 블렌드2</p>
+                  <p className="text-sm font-thin">StarBu9 Blend2</p>
+                  <br />
+                  <p className="text-xs">2개/40,000원</p>
+                  <button className="cursor-pointer border border-gray-300 text-xs  py-1 px-3 rounded-xl">
+                    수량 변경
+                  </button>
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
 
         <div className="w-[40%] left-[60%] px-10 flex flex-col items-center border-l border-l-gray-300">
           <div className="w-full flex flex-col items-start gap-8 border-b border-b-gray-300 pb-8 mt-10">
