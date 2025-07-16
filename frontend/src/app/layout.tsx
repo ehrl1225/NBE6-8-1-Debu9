@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="flex h-24 items-center">
+        <header className="flex h-24 items-center bg-[#005034]">
           <img
             src={"/images/logo.png"}
             alt="logo"
@@ -35,7 +35,7 @@ export default function RootLayout({
             height={100}
             className="pl-10"
           />
-          <p className=" pl-15 text-[#005034] text-3xl font-bold">STARBU9</p>
+          <p className=" pl-15 text-[#F9F9F2] text-3xl font-bold">STARBU9</p>
         </header>
         {children}
       </body>

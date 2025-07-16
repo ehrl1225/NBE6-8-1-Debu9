@@ -70,22 +70,29 @@ const ProdList = () => {
           ))}
         </ul>
         {selectedProd && (
-          <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white">
-            <button
-              className="bg-black text-white p-2 rounded"
+          <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white border-l border-l-gray-300">
+            <img
+              src="/images/goToBack.png"
+              width={30}
+              height={30}
               onClick={() => setSelectedProd(null)}
-            >
-              X 닫기
-            </button>
+              className="ml-3 hover:opacity-50"
+            />
 
-            <div>
-              <img src={selectedProd.imageUrl} />
-              <p className="text-sm font-bold">{selectedProd.name}</p>
-              <p className="text-sm font-thin">{selectedProd.engName}</p>
-              <br />
-              <p className="text-xs">{selectedProd.price}원</p>
-              <p>{selectedProd.description}</p>
+            <div className="flex p-10 gap-20">
+              <img src={selectedProd.imageUrl} width={250} height={250} />
+              <div className="mt-8">
+                <p className="text-sm font-bold">{selectedProd.name}</p>
+                <p className="text-sm font-thin">{selectedProd.engName}</p>
+                <br />
+                <p className="text-xs">{selectedProd.price}원</p>
+                <button className="text-white bg-[#005034] rounded-xl py-1 px-8 mt-6">
+                  장바구니
+                </button>
+              </div>
             </div>
+            <hr className="mt-5 mx-10 border border-gray-300"></hr>
+            <p className="p-20">{selectedProd.description}</p>
           </div>
         )}
       </div>
