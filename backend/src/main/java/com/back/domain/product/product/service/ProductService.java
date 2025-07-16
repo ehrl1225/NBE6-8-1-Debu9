@@ -34,6 +34,11 @@ public class ProductService {
 
         return productRepository.save(product);
     }
+    public Product create(String name, String imageUrl, String info, int price, String engName) {
+        Product product = new Product(name, imageUrl, info, price, engName);
+
+        return productRepository.save(product);
+    }
 
     public void delete(Product product) {
         productRepository.delete(product);
