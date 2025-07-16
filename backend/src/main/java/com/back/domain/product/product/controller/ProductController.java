@@ -1,16 +1,19 @@
 package com.back.domain.product.product.controller;
 
+import com.back.domain.product.product.dto.ProductDto;
 import com.back.domain.product.product.entity.Product;
 import com.back.domain.product.product.service.ProductService;
 import com.back.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -19,20 +22,30 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     private final ProductService productService;
 
+    @GetMapping
+    @Transactional(readOnly = true)
+    @Operation(summary = "다건 조회")
+    public List<ProductDto> getItems() {
+        List<Product> items = productService.findAll();
+
+        return items
+                .stream()
+                .map(ProductDto::new) // ProductDto로 변환
+                .toList();
+    }
+
+
     record ProductModifyReqbody(
 
             @NotBlank @Size(min = 1, max = 100)
             String name,
-
             @NotBlank
             String imageUrl,
-
             @NotBlank
             String info,
-
             @NotBlank
             Integer price,
-
+            @NotBlank
             String engName
     ) {
     }

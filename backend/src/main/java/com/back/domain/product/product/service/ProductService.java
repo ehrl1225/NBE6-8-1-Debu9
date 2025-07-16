@@ -5,6 +5,7 @@ import com.back.domain.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,6 +15,10 @@ public class ProductService {
 
     public long count() {
         return productRepository.count();
+    }
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     public Optional<Product> findById(int id) {
