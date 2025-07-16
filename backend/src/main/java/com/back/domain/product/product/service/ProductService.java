@@ -43,13 +43,7 @@ public class ProductService {
         Product saved = productRepository.save(product);
 
         // 3. DTO로 변환해서 반환
-        ProductDto result = new ProductDto();
-        result.setId(saved.getId());        // 자동 생성된 ID 포함
-        result.setName(saved.getName());
-        result.setPrice(saved.getPrice());
-        result.setImage_url(saved.getImage_url());
-
-        return result;
+        return convertToDto(saved);
     }
 
     public ProductDto update(Long id, ProductDto productDto) {
@@ -70,15 +64,7 @@ public class ProductService {
         Product saved = productRepository.save(product);
 
         // 4. DTO로 변환해서 반환
-        ProductDto result = new ProductDto();
-        result.setId(saved.getId());
-        result.setName(saved.getName());
-        result.setEng_name(saved.getEng_name());
-        result.setInfo(saved.getInfo());
-        result.setPrice(saved.getPrice());
-        result.setImage_url(saved.getImage_url());
-
-        return result;
+        return convertToDto(saved);
     }
 
     // 상품 삭제 (DELETE)
@@ -92,11 +78,12 @@ public class ProductService {
 
     // Entity를 DTO로 변환하는 공통 메서드
     private ProductDto convertToDto(Product product) {
-        ProductDto result = new ProductDto();
-        result.setId(product.getId());
-        result.setName(product.getName());
-        result.setPrice(product.getPrice());
-        result.setImage_url(product.getImage_url());
-        return result;
+        ProductDto dto = new ProductDto();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setEng_name(product.getEng_name());
+        dto.setPrice(product.getPrice());
+        dto.setImage_url(product.getImage_url());
+        return dto;
     }
 }
