@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased !bg-white`} // 제가 사용하는 브라우저는 다크모드라서 추가해 뒀습니다.
       >
         <header className="flex h-24 items-center bg-[#005034]">
           <img

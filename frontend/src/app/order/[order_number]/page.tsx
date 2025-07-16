@@ -13,21 +13,6 @@ interface OrderItem{
     count:number
 };
 
-// function OrderItem({data}:{data:OrderItem}){
-//     return (
-//         <div className="flex rounded-2xl overflow-hidden p-2 my-2 bg-white ">
-//             <img src={data.image_url} className="w-[100] h-[100] object-cover"></img>
-//             <div className="mt-6 ml-3 p-2 ">
-//               <p className="text-sm font-bold">{data.product_name}</p>
-//               <p className="text-sm font-thin">{data.product_eng_name}</p>
-//               <br />
-//               <p className="text-xs">{data.price}원</p>
-//             </div>
-//             <a className="mx-2 content-center">{data.count}개</a>
-//         </div>
-//     );
-// }
-
 export default function Page({params}: {params:Promise<{order_number:string}>}){
     const {order_number} = use(params);
 
