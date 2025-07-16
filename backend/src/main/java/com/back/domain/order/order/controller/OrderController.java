@@ -59,4 +59,18 @@ public class OrderController {
         );
     }
 
-}
+    @DeleteMapping("/{id}")
+    @Transactional
+    @Operation(summary = "주문 삭제")
+    public String deleteOrder(@PathVariable int id) {
+        boolean deleted = orderService.delete(id);
+        if (deleted) {
+            return "주문이 삭제되었습니다.";
+        } else {
+            return "주문을 찾을 수 없습니다.";
+        }
+    }
+
+
+    }
+

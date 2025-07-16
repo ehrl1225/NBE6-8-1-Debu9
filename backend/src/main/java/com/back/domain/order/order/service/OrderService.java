@@ -25,4 +25,14 @@ public class OrderService {
 
         return orderRepository.save(order);
     }
+
+    public boolean delete(int id) {
+        Order order = orderRepository.findById(id).orElse(null);
+        if (order == null) {
+            return false;
+        }
+
+        orderRepository.deleteById(id);
+        return true;
+    }
 }
