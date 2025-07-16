@@ -46,10 +46,10 @@ const ShoppingCart = () => {
   );
 };
 
-const Order = () => {
+/*const Order = () => {
   return (
     <>
-      <div className="fix4w-[40%] left-[60%] px-10 flex flex-col items-center border-l border-l-gray-300">
+      <div>
         <div className="w-full flex flex-col items-start gap-8 border-b border-b-gray-300 pb-8 mt-10">
           <p className="text-2xl">구매 금액</p>
           <div className="flex gap-50">
@@ -63,36 +63,71 @@ const Order = () => {
             </div>
           </div>
         </div>
-
-        <div className="w-full flex flex-col items-start mt-10">
-          <div className="flex flex-col gap-3">
-            <p className="text-2xl pb-8">구매자 정보</p>
-            <label>이메일</label>
-            <input
-              placeholder="email"
-              className="border border-gray-300 pl-10 p-2 rounded-lg 
+      <OrderSummary />
+      <UserInfo />
+      <div className="w-full flex flex-col items-start mt-10">
+        <div className="flex flex-col gap-3">
+          <p className="text-2xl pb-8">구매자 정보</p>
+          <label>이메일</label>
+          <input
+            placeholder="email"
+            className="border border-gray-300 pl-10 p-2 rounded-lg 
               bg-white bg-[url('/images/email.png')] bg-no-repeat bg-[length:18px_18px] bg-[position:10px_center]"
-            />
-            <label>주소</label>
-            <input
-              placeholder="address"
-              className="border border-gray-300 pl-10 p-2 rounded-lg
+          />
+          <label>주소</label>
+          <input
+            placeholder="address"
+            className="border border-gray-300 pl-10 p-2 rounded-lg
               bg-white bg-[url('/images/address.png')] bg-no-repeat bg-[length:18px_18px] bg-[position:10px_center]"
-            />
-            <button className="p-2 mt-8 px-5 bg-[#005034] text-white rounded-xl">
-              {total_price}원 결제하기({total_item}개)
-            </button>
-          </div>
+          />
+          <button className="p-2 mt-8 px-5 bg-[#005034] text-white rounded-xl">
+            {total_price}원 결제하기({total_item}개)
+          </button>
         </div>
       </div>
     </>
   );
-};
+};*/
 
+const OrderSummary = () => {
+  return (
+    <>
+      <div>
+        <p>구매 금액</p>
+        <p>상품 금액</p>
+        <p>{total_price}</p>
+        <p>배송비</p>
+        <p>무료배송</p>
+      </div>
+    </>
+  );
+};
+const UserInfo = () => {
+  return (
+    <>
+      <p>구매자 정보</p>
+      <label>이메일</label>
+      <input placeholder="email" />
+      <label>주소</label>
+      <input placeholder="address" />
+      <button>
+        {total_price}원 결제하기({total_item}개)
+      </button>
+    </>
+  );
+};
+const Order = () => {
+  return (
+    <>
+      <OrderSummary />
+      <UserInfo />
+    </>
+  );
+};
 export default function Page() {
   return (
     <>
-      <div className="h-full bg-gray-300 flex">
+      <div className="h-full bg-blue-200 flex border border-2 border-red-500">
         <ShoppingCart />
         <Order />
       </div>
