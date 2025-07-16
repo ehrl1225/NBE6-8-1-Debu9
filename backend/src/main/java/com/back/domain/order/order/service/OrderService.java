@@ -19,4 +19,10 @@ public class OrderService {
     public List<Order> findAll() {
         return orderRepository.findAll();
     }
+
+    public Order write( int userId,  int productId, String address, String delivaryState) {
+        Order order = new Order(userId, productId, address, delivaryState);
+
+        return orderRepository.save(order);
+    }
 }
