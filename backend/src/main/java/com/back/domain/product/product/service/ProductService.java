@@ -23,4 +23,10 @@ public class ProductService {
     public void modify(Product product, String name, String imageUrl, String info, int price, String engName) {
         product.modify(name, imageUrl, info, price, engName);
     }
+
+    public Product write(String name, String imageUrl, String info, int price, String engName) {
+        Product product = new Product(name, imageUrl, info, price, engName);
+
+        return productRepository.save(product);
+    }
 }

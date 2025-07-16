@@ -2,7 +2,7 @@ package com.back.domain.product.product.controller;
 
 import com.back.domain.product.product.entity.Product;
 import com.back.domain.product.product.service.ProductService;
-import com.back.global.rsdata.RsData;
+import com.back.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
