@@ -34,6 +34,16 @@ public class OrderController {
                 .toList();
     }
 
+    // id로 조회
+    @GetMapping("/{id}")
+    @Transactional(readOnly = true)
+    @Operation(summary = "주문 단건 조회")
+    public OrderDto getItem(@PathVariable int id) {
+        Order order = orderService.findById(id).get();
+
+        return new OrderDto(order);
+    }
+
     record OrderWriteReqBody(
             @NotNull
             int userId,
