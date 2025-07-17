@@ -1,5 +1,5 @@
-import { Product } from "../type/product";
-import { CartItem } from "../type/cartItem";
+import { Product } from "../../lib/type/product";
+import { CartItem } from "../../lib/type/cartItem";
 
 export const dummyProducts : Product[]=[
       {

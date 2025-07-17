@@ -1,5 +1,5 @@
 "use client";
-import { CartItem } from "../type/cartItem";
+import { CartItem } from "../../lib/type/cartItem";
 import { useState } from "react";
 import { dummyCartItems } from "../data/dummydata";
 const ShoppingCart = ({

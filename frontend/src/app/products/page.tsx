@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Product } from "../type/product";
+import { Product } from "../../lib/type/product";
 import { dummyProducts } from "../data/dummydata";
 
 const ProdList = ({
