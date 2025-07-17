@@ -3,6 +3,8 @@ package com.back.domain.order.order.controller;
 import com.back.domain.order.order.dto.OrderDto;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
+import com.back.domain.order.orderItem.dto.OrderItemDto;
+import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,6 +66,52 @@ public class OrderController {
                 "201-1",
                 "%d번 글이 작성되었습니다.".formatted(order.getId()),
                 new OrderDto(order)
+        );
+    }
+
+    record OrderItemCreateReqBody(
+            @NotNull
+            int orderId,
+            @NotNull
+            int productId,
+            @NotNull
+            int count,
+            @NotBlank
+            String deliveryState
+    ) {}
+
+    @PostMapping("/items")
+    @Transactional
+    @Operation(summary = "주문 아이템 생성")
+    public RsData<OrderItemDto> createOrderItem(@Valid @RequestBody OrderItemCreateReqBody reqBody) {
+        OrderItem orderItem = orderService.createOrderItem(
+                reqBody.orderId,
+                reqBody.productId,
+                reqBody.count,
+                reqBody.deliveryState
+        );
+
+        return new RsData<>(
+                "201-1",
+                "주문 아이템이 생성되었습니다.",
+                new OrderItemDto(orderItem)
+        );
+    }
+
+    @GetMapping("/{orderId}/delivery-schedule")
+    @Transactional(readOnly = true)
+    @Operation(summary = "배송일정 조회")
+    public RsData<List<OrderItemDto>> getDeliverySchedule(@PathVariable int orderId) {
+        List<OrderItem> orderItems = orderService.getOrderItemsByOrderId(orderId);
+
+        List<OrderItemDto> deliverySchedule = orderItems.stream()
+                .map(OrderItemDto::new)
+                .toList();
+
+        return new RsData<>(
+                "200-1",
+                "배송일정 조회",
+                deliverySchedule
         );
     }
 
