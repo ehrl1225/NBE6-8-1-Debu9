@@ -40,8 +40,6 @@ public class OrderItemController {
     }
     record OrderItemCreateReqBody(
             @NotNull
-            int orderId,
-            @NotNull
             int productId,
             @NotNull
             int count,
@@ -64,6 +62,8 @@ public class OrderItemController {
                 reqBody.count,
                 reqBody.deliveryState
         );
+
+        orderService.flush(); // DB반영
 
         return new RsData<>(
                 "201-1",

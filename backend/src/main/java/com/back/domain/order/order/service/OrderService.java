@@ -58,4 +58,8 @@ public class OrderService {
     public void modifyitem(OrderItem orderItem, int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
         orderItem.modify(count, expectedDeliveryDate, deliveryState);
     }
+
+    public void flush() {
+        orderRepository.flush();
+    }
 }
