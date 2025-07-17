@@ -41,13 +41,19 @@ const ProdDesc = ({
   onClose,
   cartItems,
   setCartItems,
+  quantity,
+  increase,
+  decrease,
 }: {
   product: Product;
   onClose: () => void;
   cartItems: CartItem[];
   setCartItems: (items: CartItem[]) => void;
+  quantity: number;
+  increase: () => void;
+  decrease: () => void;
 }) => {
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, quantity: number) => {
     const isAlready = cartItems.some((item) => item.product.id === product.id);
 
     if (isAlready) {
@@ -57,7 +63,7 @@ const ProdDesc = ({
 
     const newItem: CartItem = {
       product,
-      quantity: 1,
+      quantity: quantity,
     };
 
     setCartItems([...cartItems, newItem]);
@@ -80,8 +86,14 @@ const ProdDesc = ({
           <p className="text-sm font-thin">{product.engName}</p>
           <br />
           <p className="text-xs">{product.price}원</p>
+          <div className="flex gap-2 mt-3">
+            <img onClick={decrease} src="/images/minus.png" />
+
+            {quantity}
+            <img onClick={increase} src="/images/plus.png" />
+          </div>
           <button
-            onClick={() => addToCart(product)}
+            onClick={() => addToCart(product, quantity)}
             className="cursor-pointer text-white bg-[#005034] rounded-xl py-1 px-8 mt-6"
           >
             장바구니 담기
@@ -98,6 +110,7 @@ export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProd, setSelectedProd] = useState<Product | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [quantity, setQuantity] = useState<number>(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -123,6 +136,17 @@ export default function Page() {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const increase = () => {
+    setQuantity(quantity + 1);
+  };
+  const decrease = () => {
+    if (quantity == 1) {
+      alert("최소 주문 수량은 1개 입니다.");
+      return;
+    }
+    setQuantity(quantity - 1);
+  };
+
   return (
     <>
       <ProdList products={products} onSelect={setSelectedProd} />
@@ -132,6 +156,9 @@ export default function Page() {
           onClose={() => setSelectedProd(null)}
           cartItems={cartItems}
           setCartItems={setCartItems}
+          quantity={quantity}
+          increase={increase}
+          decrease={decrease}
         />
       )}
     </>
