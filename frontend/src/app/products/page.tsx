@@ -56,18 +56,30 @@ const ProdDesc = ({
   setQuantity: (quantity: number) => void;
 }) => {
   const addToCart = (product: Product, quantity: number) => {
-    const isAlready = cartItems.some((item) => item.product.id === product.id);
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item.product.id === product.id
+    );
 
-    if (isAlready) {
-      increase();
+    let updatedCart;
+
+    if (existingItemIndex !== -1) {
+      const updatedItem = {
+        ...cartItems[existingItemIndex],
+        quantity: cartItems[existingItemIndex].quantity + quantity,
+      };
+
+      updatedCart = [...cartItems];
+      updatedCart[existingItemIndex] = updatedItem;
+    } else {
+      const newItem: CartItem = {
+        product,
+        quantity,
+      };
+
+      updatedCart = [...cartItems, newItem];
     }
 
-    const newItem: CartItem = {
-      product,
-      quantity: quantity,
-    };
-
-    setCartItems([...cartItems, newItem]);
+    setCartItems(updatedCart);
     alert("장바구니에 담겼습니다.");
     setQuantity(1);
   };
