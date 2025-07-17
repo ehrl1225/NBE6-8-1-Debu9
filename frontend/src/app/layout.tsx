@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from 'next/link'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,14 +29,30 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased !bg-white`} // 제가 사용하는 브라우저는 다크모드라서 추가해 뒀습니다.
       >
         <header className="flex h-24 items-center bg-[#005034]">
-          <img
-            src={"/images/logo.png"}
-            alt="logo"
-            width={100}
-            height={100}
-            className="pl-10"
-          />
-          <p className=" pl-15 text-[#F9F9F2] text-3xl font-bold">STARBU9</p>
+          <Link href="/">
+            <img
+              src={"/images/logo.png"}
+              alt="logo"
+              width={100}
+              height={100}
+              className="pl-10"
+              
+            />
+          </Link>
+          <Link href="/">
+            <p className="pl-15 text-[#F9F9F2] text-3xl font-bold">STARBU9</p>
+          </Link>
+          <ul className="menu flex justify-between bg-[#005034] text-white ml-30 h-full items-center">
+            <Link href="/products" className="h-full hover:bg-[#377D22] w-[150] flex items-center justify-center">
+              <p className="text-xl">상품</p>
+            </Link>
+            <Link href="/cart" className="h-full hover:bg-[#377D22] w-[150] flex items-center justify-center">
+              <p className="text-xl">장바구니</p>
+              </Link>
+            <Link href="/order/list"  className="h-full hover:bg-[#377D22] w-[150] flex items-center justify-center">
+              <p className="text-xl">주문</p>
+            </Link>
+          </ul>
         </header>
         {children}
       </body>
