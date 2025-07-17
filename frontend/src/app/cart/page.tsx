@@ -41,16 +41,22 @@ const ShoppingCart = ({
               checked={!!selectedMap[item.product.id]}
               onChange={() => checkboxChange(item.product.id)}
             />
-            <img
-              src={item.product.imageUrl}
-              className="w-24 h-24 object-cover"
-            />
-            <div className="mt-3 w-full">
-              <p className="text-sm font-bold">{item.product.name}</p>
-              <p className="text-sm text-gray-500">{item.product.engName}</p>
-              <p className="text-xs mt-1">
-                {item.quantity}개 / {item.product.price * item.quantity}원
-              </p>
+
+            <img src={item.product.imageUrl} className="w-40 h-40" />
+
+            <div className="flex flex-col gap-8">
+              <div className="mt-3 w-full">
+                <p className="text-sm font-bold">{item.product.name}</p>
+                <p className="text-sm text-gray-500">{item.product.engName}</p>
+                <p className="text-xs mt-1">
+                  {item.quantity}개 / {item.product.price * item.quantity}원
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <img src="/images/minus.png" />
+                <p>{item.quantity}</p>
+                <img src="/images/plus.png" />
+              </div>
             </div>
           </li>
         ))}
