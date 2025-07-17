@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Product } from "../../lib/type/product";
+import { CartItem } from "@/lib/type/cartItem";
 
 const ProdList = ({
   products,
@@ -38,10 +39,30 @@ const ProdList = ({
 const ProdDesc = ({
   product,
   onClose,
+  cartItems,
+  setCartItems,
 }: {
   product: Product;
   onClose: () => void;
+  cartItems: CartItem[];
+  setCartItems: (items: CartItem[]) => void;
 }) => {
+  const addToCart = (product: Product) => {
+    const isAlready = cartItems.some((item) => item.product.id === product.id);
+
+    if (isAlready) {
+      alert("이미 장바구니에 담겨있습니다.");
+      return;
+    }
+
+    const newItem: CartItem = {
+      product,
+      quantity: 1,
+    };
+
+    setCartItems([...cartItems, newItem]);
+    alert("장바구니에 담겼습니다.");
+  };
   return (
     <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white border-l border-l-gray-300">
       <img
@@ -59,8 +80,11 @@ const ProdDesc = ({
           <p className="text-sm font-thin">{product.engName}</p>
           <br />
           <p className="text-xs">{product.price}원</p>
-          <button className="text-white bg-[#005034] rounded-xl py-1 px-8 mt-6">
-            장바구니
+          <button
+            onClick={() => addToCart(product)}
+            className="cursor-pointer text-white bg-[#005034] rounded-xl py-1 px-8 mt-6"
+          >
+            장바구니 담기
           </button>
         </div>
       </div>
@@ -73,6 +97,7 @@ const ProdDesc = ({
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProd, setSelectedProd] = useState<Product | null>(null);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -86,6 +111,18 @@ export default function Page() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const stored = localStorage.getItem("cartItems");
+
+    if (stored) {
+      setCartItems(JSON.parse(stored));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   return (
     <>
       <ProdList products={products} onSelect={setSelectedProd} />
@@ -93,6 +130,8 @@ export default function Page() {
         <ProdDesc
           product={selectedProd}
           onClose={() => setSelectedProd(null)}
+          cartItems={cartItems}
+          setCartItems={setCartItems}
         />
       )}
     </>
