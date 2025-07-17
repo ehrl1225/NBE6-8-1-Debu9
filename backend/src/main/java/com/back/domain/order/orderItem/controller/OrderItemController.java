@@ -38,6 +38,39 @@ public class OrderItemController {
                 .map(OrderItemDto::new)
                 .toList();
     }
+    record OrderItemCreateReqBody(
+            @NotNull
+            int productId,
+            @NotNull
+            int count,
+            @NotBlank
+            String deliveryState
+    ) {}
+
+    @PostMapping
+    @Transactional
+    @Operation(summary = "주문 아이템 추가")
+    public RsData<OrderItemDto> addOrderItem(
+            @PathVariable int orderId, // PathVariable로 주문 ID를 받음
+            @Valid @RequestBody OrderItemCreateReqBody reqBody
+    ) {
+        Order order = orderService.findById(orderId).get(); // order 객체를 가져옴
+
+        OrderItem orderItem = orderService.createOrderItem(
+                order,
+                reqBody.productId,
+                reqBody.count,
+                reqBody.deliveryState
+        );
+
+        orderService.flush(); // DB반영
+
+        return new RsData<>(
+                "201-1",
+                "주문 아이템이 생성되었습니다.",
+                new OrderItemDto(orderItem)
+        );
+    }
 
     record OrderItemsModifyReqBody(
             @NotNull
