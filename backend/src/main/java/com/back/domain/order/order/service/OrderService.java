@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -29,6 +30,7 @@ public class OrderService {
     public Optional<Order> findById(int id) {
         return orderRepository.findById(id);
     }
+
     public Order write(int userId, int productId, String address) {
         Order order = new Order(userId, productId, address);
 
@@ -54,4 +56,7 @@ public class OrderService {
         return false;
     }
 
+    public void modifyitem(OrderItem orderItem, int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
+        orderItem.modify(count, expectedDeliveryDate, deliveryState);
+    }
 }
