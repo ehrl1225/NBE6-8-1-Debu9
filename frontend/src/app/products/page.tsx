@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Product } from "../../lib/type/product";
+import { CartItem } from "@/lib/type/cartItem";
 
 const ProdList = ({
   products,
@@ -38,10 +39,50 @@ const ProdList = ({
 const ProdDesc = ({
   product,
   onClose,
+  cartItems,
+  setCartItems,
+  quantity,
+  increase,
+  decrease,
+  setQuantity,
 }: {
   product: Product;
   onClose: () => void;
+  cartItems: CartItem[];
+  setCartItems: (items: CartItem[]) => void;
+  quantity: number;
+  increase: () => void;
+  decrease: () => void;
+  setQuantity: (quantity: number) => void;
 }) => {
+  const addToCart = (product: Product, quantity: number) => {
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item.product.id === product.id
+    );
+
+    let updatedCart;
+
+    if (existingItemIndex !== -1) {
+      const updatedItem = {
+        ...cartItems[existingItemIndex],
+        quantity: cartItems[existingItemIndex].quantity + quantity,
+      };
+
+      updatedCart = [...cartItems];
+      updatedCart[existingItemIndex] = updatedItem;
+    } else {
+      const newItem: CartItem = {
+        product,
+        quantity,
+      };
+
+      updatedCart = [...cartItems, newItem];
+    }
+
+    setCartItems(updatedCart);
+    alert("장바구니에 담겼습니다.");
+    setQuantity(1);
+  };
   return (
     <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white border-l border-l-gray-300">
       <img
@@ -59,8 +100,17 @@ const ProdDesc = ({
           <p className="text-sm font-thin">{product.engName}</p>
           <br />
           <p className="text-xs">{product.price}원</p>
-          <button className="text-white bg-[#005034] rounded-xl py-1 px-8 mt-6">
-            장바구니
+          <div className="flex gap-2 mt-3">
+            <img onClick={decrease} src="/images/minus.png" />
+
+            {quantity}
+            <img onClick={increase} src="/images/plus.png" />
+          </div>
+          <button
+            onClick={() => addToCart(product, quantity)}
+            className="cursor-pointer text-white bg-[#005034] rounded-xl py-1 px-8 mt-6"
+          >
+            장바구니 담기
           </button>
         </div>
       </div>
@@ -73,6 +123,8 @@ const ProdDesc = ({
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProd, setSelectedProd] = useState<Product | null>(null);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [quantity, setQuantity] = useState<number>(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -86,6 +138,29 @@ export default function Page() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const stored = localStorage.getItem("cartItems");
+
+    if (stored) {
+      setCartItems(JSON.parse(stored));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  const increase = () => {
+    setQuantity(quantity + 1);
+  };
+  const decrease = () => {
+    if (quantity == 1) {
+      alert("최소 주문 수량은 1개 입니다.");
+      return;
+    }
+    setQuantity(quantity - 1);
+  };
+
   return (
     <>
       <ProdList products={products} onSelect={setSelectedProd} />
@@ -93,6 +168,12 @@ export default function Page() {
         <ProdDesc
           product={selectedProd}
           onClose={() => setSelectedProd(null)}
+          cartItems={cartItems}
+          setCartItems={setCartItems}
+          quantity={quantity}
+          increase={increase}
+          decrease={decrease}
+          setQuantity={setQuantity}
         />
       )}
     </>

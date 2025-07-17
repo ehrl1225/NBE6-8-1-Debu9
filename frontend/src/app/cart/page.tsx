@@ -1,6 +1,6 @@
 "use client";
 import { CartItem } from "../../lib/type/cartItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dummyCartItems } from "../data/dummydata";
 const ShoppingCart = ({
   selectedItems,
@@ -116,8 +116,19 @@ const UserInfo = ({
 };
 
 export default function Page() {
-  const [selectedItems, setSelectedItems] =
-    useState<CartItem[]>(dummyCartItems);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("cartItems");
+
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      setCartItems(parsed);
+      setSelectedItems(parsed);
+    }
+  }, []);
+
+  const [selectedItems, setSelectedItems] = useState<CartItem[]>(cartItems);
   const [selectedMap, setSelectedMap] = useState<{ [key: number]: boolean }>(
     {}
   );
