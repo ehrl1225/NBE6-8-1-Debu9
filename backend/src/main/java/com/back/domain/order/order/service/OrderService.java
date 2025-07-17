@@ -37,7 +37,7 @@ public class OrderService {
 
     @Transactional
     public OrderItem createOrderItem(int orderId, int productId, int count, String deliveryState) {
-        LocalDateTime expectedDeliveryDate = LocalDateTime.now().plusDays(1).withHour(14).withMinute(0).withSecond(0);
+        LocalDateTime expectedDeliveryDate = LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0);
         OrderItem orderItem = new OrderItem(orderId, productId, count, expectedDeliveryDate, deliveryState);
         return orderItemRepository.save(orderItem);
     }
