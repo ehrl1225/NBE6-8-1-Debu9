@@ -44,6 +44,7 @@ const ProdDesc = ({
   quantity,
   increase,
   decrease,
+  setQuantity,
 }: {
   product: Product;
   onClose: () => void;
@@ -52,13 +53,13 @@ const ProdDesc = ({
   quantity: number;
   increase: () => void;
   decrease: () => void;
+  setQuantity: (quantity: number) => void;
 }) => {
   const addToCart = (product: Product, quantity: number) => {
     const isAlready = cartItems.some((item) => item.product.id === product.id);
 
     if (isAlready) {
-      alert("이미 장바구니에 담겨있습니다.");
-      return;
+      increase();
     }
 
     const newItem: CartItem = {
@@ -68,6 +69,7 @@ const ProdDesc = ({
 
     setCartItems([...cartItems, newItem]);
     alert("장바구니에 담겼습니다.");
+    setQuantity(1);
   };
   return (
     <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white border-l border-l-gray-300">
@@ -159,6 +161,7 @@ export default function Page() {
           quantity={quantity}
           increase={increase}
           decrease={decrease}
+          setQuantity={setQuantity}
         />
       )}
     </>
