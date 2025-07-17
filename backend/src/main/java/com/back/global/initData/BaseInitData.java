@@ -41,8 +41,8 @@ public class BaseInitData {
     public void work2() {
         if (orderService.count() >0) return;
 
-        Order order1 = orderService.write(1, 1, "서울시 강남구 역삼동", "배송중");
-        Order order2 = orderService.write(2, 12, "대전광역시 동구 자양동", "배송완료");
-        Order order3 = orderService.write(3, 3, "부산광역시 해운대구 우동", "배송준비중");
+        Order order1 = orderService.write(1, 1, "서울시 강남구 역삼동");
+        Order order2 = orderService.write(2, 12, "대전광역시 동구 자양동");
+        Order order3 = orderService.write(3, 3, "부산광역시 해운대구 우동");
     }
 }

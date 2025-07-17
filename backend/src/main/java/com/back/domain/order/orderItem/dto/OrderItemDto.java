@@ -1,6 +1,7 @@
 package com.back.domain.order.orderItem.dto;
 
 import com.back.domain.order.orderItem.entity.OrderItem;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,10 @@ public record OrderItemDto(
         LocalDateTime modifyDate,
         int orderId,
         int productId,
-        int count
+        int count,
+        LocalDateTime expectedDeliveryDate,
+        String deliveryState
+
 ) {
     public OrderItemDto(OrderItem orderItem) {
         this(
@@ -19,7 +23,9 @@ public record OrderItemDto(
                 orderItem.getModifyDate(),
                 orderItem.getOrderId(),
                 orderItem.getProductId(),
-                orderItem.getCount()
+                orderItem.getCount(),
+                orderItem.getExpectedDeliveryDate(),
+                orderItem.getDeliveryState()
         );
     }
 
