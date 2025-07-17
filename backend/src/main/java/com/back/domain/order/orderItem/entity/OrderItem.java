@@ -25,4 +25,10 @@ public class OrderItem extends BaseEntity {
         this.deliveryState = deliveryState;
     }
 
+    public void modify(int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
+        this.count = count;
+        this.expectedDeliveryDate = expectedDeliveryDate;
+        this.deliveryState = deliveryState;
+    }
+
 }
