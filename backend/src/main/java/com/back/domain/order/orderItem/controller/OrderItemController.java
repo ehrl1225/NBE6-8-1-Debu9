@@ -42,7 +42,7 @@ public class OrderItemController {
     record OrderItemsModifyReqBody(
             @NotNull
             int count,
-            @NotBlank
+            @NotNull
             LocalDateTime expectedDeliveryDate,
             @NotBlank
             String deliveryState

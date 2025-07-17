@@ -49,6 +49,10 @@ public class BaseInitData {
         Order order1 = orderService.write(1, products.get(0).getId(), "서울시 강남구 역삼동");
         Order order2 = orderService.write(2, products.get(1).getId(), "대전광역시 동구 자양동");
         Order order3 = orderService.write(3, products.get(2).getId(), "부산광역시 해운대구 우동");
+
+        order1.addItem(products.get(0).getId(), 2, null, "상품 준비 중");
+        order1.addItem(products.get(1).getId(), 1, null, "배송중");
+        order2.addItem(products.get(1).getId(), 3, null, "배송완료");
     }
 
     @Transactional
