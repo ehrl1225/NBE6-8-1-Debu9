@@ -1,7 +1,7 @@
 "use client";
 import { CartItem } from "../../lib/type/cartItem";
 import { useEffect, useState } from "react";
-import { dummyCartItems } from "../data/dummydata";
+
 const ShoppingCart = ({
   selectedItems,
   selectedMap,
@@ -51,9 +51,6 @@ const ShoppingCart = ({
               <p className="text-xs mt-1">
                 {item.quantity}개 / {item.product.price * item.quantity}원
               </p>
-              <button className="cursor-pointer border border-gray-300 text-sm py-1 px-3 ml-40 rounded-xl">
-                옵션 변경
-              </button>
             </div>
           </li>
         ))}
