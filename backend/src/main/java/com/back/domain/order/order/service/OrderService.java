@@ -2,9 +2,11 @@ package com.back.domain.order.order.service;
 
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
+import com.back.domain.order.orderItem.entity.OrderItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +39,9 @@ public class OrderService {
             return true;
         }
         return false;
+    }
+
+    public void modifyitem(OrderItem orderItem, int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
+        orderItem.modify(count, expectedDeliveryDate, deliveryState);
     }
 }

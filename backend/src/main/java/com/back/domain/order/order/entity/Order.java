@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
@@ -32,5 +33,12 @@ public class Order extends BaseEntity {
         this.userId = userId;
         this.orderNum = orderNum;
         this.address = address;
+    }
+
+    public Optional<OrderItem> findItemById(int id) {
+        return items
+                .stream()
+                .filter(item -> item.getId() == id)
+                .findFirst();
     }
 }
