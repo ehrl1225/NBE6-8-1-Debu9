@@ -50,9 +50,7 @@ public class OrderController {
             @NotNull
             int productId,
             @NotBlank
-            String address,
-            @NotBlank
-            String deliveryState
+            String address
     ) {
     }
 
@@ -60,7 +58,7 @@ public class OrderController {
     @Transactional
     @Operation(summary = "주문 생성")
     public RsData<OrderDto> write(@Valid @RequestBody OrderWriteReqBody reqBody) {
-        Order order = orderService.write(reqBody.userId, reqBody.productId, reqBody.address, reqBody.deliveryState);
+        Order order = orderService.write(reqBody.userId, reqBody.productId, reqBody.address);
 
         return new RsData<>(
                 "201-1",

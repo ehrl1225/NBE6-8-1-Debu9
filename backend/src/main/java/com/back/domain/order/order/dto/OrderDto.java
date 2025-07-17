@@ -10,8 +10,7 @@ public record OrderDto (
         LocalDateTime modifyDate,
         int userId,
         int orderNum,
-        String address,
-        String deliveryState
+        String address
 )
 {
     public OrderDto(Order order) {
@@ -21,8 +20,7 @@ public record OrderDto (
                 order.getModifyDate(),
                 order.getUserId(),
                 order.getOrderNum(),
-                order.getAddress(),
-                order.getDeliveryState()
+                order.getAddress()
         );
     }
 }

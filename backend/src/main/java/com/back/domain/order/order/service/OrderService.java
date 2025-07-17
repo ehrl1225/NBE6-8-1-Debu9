@@ -2,9 +2,11 @@ package com.back.domain.order.order.service;
 
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
+import com.back.domain.order.orderItem.entity.OrderItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +26,8 @@ public class OrderService {
     public Optional<Order> findById(int id) {
         return orderRepository.findById(id);
     }
-    public Order write( int userId,  int productId, String address, String delivaryState) {
-        Order order = new Order(userId, productId, address, delivaryState);
+    public Order write(int userId, int productId, String address) {
+        Order order = new Order(userId, productId, address);
 
         return orderRepository.save(order);
     }
