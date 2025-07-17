@@ -37,11 +37,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    @Transactional
-    public OrderItem createOrderItem(int orderId, int productId, int count, String deliveryState) {
+    public OrderItem createOrderItem(Order order, int productId, int count, String deliveryState) {
         LocalDateTime expectedDeliveryDate = LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0);
-        OrderItem orderItem = new OrderItem(orderId, productId, count, expectedDeliveryDate, deliveryState);
-        return orderItemRepository.save(orderItem);
+
+        return order.addItem(productId, count, expectedDeliveryDate, deliveryState);
     }
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {

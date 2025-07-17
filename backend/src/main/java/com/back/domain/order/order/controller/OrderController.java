@@ -69,35 +69,6 @@ public class OrderController {
         );
     }
 
-    record OrderItemCreateReqBody(
-            @NotNull
-            int orderId,
-            @NotNull
-            int productId,
-            @NotNull
-            int count,
-            @NotBlank
-            String deliveryState
-    ) {}
-
-    @PostMapping("/items")
-    @Transactional
-    @Operation(summary = "주문 아이템 생성")
-    public RsData<OrderItemDto> createOrderItem(@Valid @RequestBody OrderItemCreateReqBody reqBody) {
-        OrderItem orderItem = orderService.createOrderItem(
-                reqBody.orderId,
-                reqBody.productId,
-                reqBody.count,
-                reqBody.deliveryState
-        );
-
-        return new RsData<>(
-                "201-1",
-                "주문 아이템이 생성되었습니다.",
-                new OrderItemDto(orderItem)
-        );
-    }
-
     @GetMapping("/{orderId}/delivery-schedule")
     @Transactional(readOnly = true)
     @Operation(summary = "배송일정 조회")
