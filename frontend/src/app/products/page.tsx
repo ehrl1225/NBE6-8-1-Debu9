@@ -1,7 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Product } from "../../lib/type/product";
-import { dummyProducts } from "../data/dummydata";
 
 const ProdList = ({
   products,
@@ -66,16 +65,30 @@ const ProdDesc = ({
         </div>
       </div>
       <hr className="mt-5 mx-10 border border-gray-300"></hr>
-      <p className="p-20">{product.description}</p>
+      <p className="p-20">{product.info}</p>
     </div>
   );
 };
 
 export default function Page() {
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedProd, setSelectedProd] = useState<Product | null>(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const url = "http://localhost:8080/api/products";
+      console.log("fetching from:", url);
+      const res = await fetch(url);
+      const data = await res.json();
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <>
-      <ProdList products={dummyProducts} onSelect={setSelectedProd} />
+      <ProdList products={products} onSelect={setSelectedProd} />
       {selectedProd && (
         <ProdDesc
           product={selectedProd}
