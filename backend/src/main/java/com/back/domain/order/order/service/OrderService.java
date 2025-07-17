@@ -1,5 +1,7 @@
 package com.back.domain.order.order.service;
 
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.repository.MemberRepository;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
 import com.back.domain.order.orderItem.entity.OrderItem;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final MemberRepository memberRepository;
 
     public long count() {
         return orderRepository.count();
@@ -45,6 +48,7 @@ public class OrderService {
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
         return orderItemRepository.findByOrderId(orderId);
     }
+
 
     public boolean delete(int id) {
         if (orderRepository.existsById(id)) {

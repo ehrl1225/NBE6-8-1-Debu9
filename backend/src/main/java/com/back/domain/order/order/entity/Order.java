@@ -1,10 +1,12 @@
 package com.back.domain.order.order.entity;
 
+import com.back.domain.member.member.entity.Member;
 import com.back.global.jpa.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Random;
 
 @Entity
 @Getter
@@ -15,9 +17,11 @@ public class Order extends BaseEntity {
     int orderNum;
     String address;
 
+
     public Order(int userId, int orderNum, String address) {
         this.userId = userId;
         this.orderNum = orderNum;
         this.address = address;
     }
+
 }
