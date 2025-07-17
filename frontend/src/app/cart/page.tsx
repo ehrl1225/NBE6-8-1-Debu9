@@ -9,6 +9,8 @@ const ShoppingCart = ({
   checkboxChange,
   allCheck,
   selectedDelete,
+  setCartItems,
+  setSelectedItems,
 }: {
   selectedItems: CartItem[];
   selectedMap: { [key: number]: boolean };
@@ -16,7 +18,45 @@ const ShoppingCart = ({
   checkboxChange: (id: number) => void;
   allCheck: () => void;
   selectedDelete: () => void;
+  setCartItems: (cartItems: CartItem[]) => void;
+  setSelectedItems: (cartItems: CartItem[]) => void;
 }) => {
+  const increaseQuantity = (item: CartItem) => {
+    const updatedItems = selectedItems.map((cartItem) => {
+      if (cartItem.product.id === item.product.id) {
+        return {
+          ...cartItem,
+          quantity: cartItem.quantity + 1,
+        };
+      }
+      return cartItem;
+    });
+
+    setSelectedItems(updatedItems);
+    setCartItems(updatedItems); // 상태 동기화
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+  };
+
+  const decreaseQuantity = (item: CartItem) => {
+    const updatedItems = selectedItems
+      .map((cartItem) => {
+        if (cartItem.product.id === item.product.id) {
+          const newQuantity = cartItem.quantity - 1;
+          if (newQuantity <= 0) return null;
+          return {
+            ...cartItem,
+            quantity: newQuantity,
+          };
+        }
+        return cartItem;
+      })
+      .filter(Boolean) as CartItem[];
+
+    setSelectedItems(updatedItems);
+    setCartItems(updatedItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+  };
+
   return (
     <div className="flex flex-col px-20 py-10 bg-white pt-10 w-1/2">
       <div className="flex items-center gap-2 mb-4 border-b border-b-gray-300 pb-3">
@@ -53,9 +93,15 @@ const ShoppingCart = ({
                 </p>
               </div>
               <div className="flex gap-2">
-                <img src="/images/minus.png" />
+                <img
+                  src="/images/plus.png"
+                  onClick={() => increaseQuantity(item)}
+                />
                 <p>{item.quantity}</p>
-                <img src="/images/plus.png" />
+                <img
+                  src="/images/minus.png"
+                  onClick={() => decreaseQuantity(item)}
+                />
               </div>
             </div>
           </li>
@@ -64,6 +110,7 @@ const ShoppingCart = ({
     </div>
   );
 };
+
 const Order = ({
   total_price,
   total_item,
@@ -186,6 +233,8 @@ export default function Page() {
         checkboxChange={checkboxChange}
         allCheck={allCheck}
         selectedDelete={selectedDelete}
+        setCartItems={setCartItems}
+        setSelectedItems={setSelectedItems}
       />
       <Order total_price={total_price} total_item={total_item} />
     </div>
