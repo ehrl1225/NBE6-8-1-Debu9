@@ -25,7 +25,6 @@ public class Order extends BaseEntity {
     private int orderNum;
     private String address;
 
-    // Table 어노테이션 사용했으니 mappedBy 어노테이션이 작동하지 않거나, 오류 발생 가능성 있음
     @OneToMany(mappedBy = "order", fetch = LAZY, cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
