@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from 'next/link'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,11 @@ export default function RootLayout({
             className="pl-10"
           />
           <p className=" pl-15 text-[#F9F9F2] text-3xl font-bold">STARBU9</p>
+          <ul className="menu flex justify-between bg-[#005034] text-white">
+            <Link href="/products" className="py-2 hover:bg-green-400 w-[150] text-center">상품</Link>
+            <Link href="/cart" className="py-2 hover:bg-green-400 w-[150] text-center">장바구니</Link>
+            <Link href="/order/list"  className="py-2 hover:bg-green-400 w-[150] text-center">주문</Link>
+          </ul>
         </header>
         {children}
       </body>
