@@ -1,116 +1,8 @@
 "use client";
 import { CartItem } from "../../lib/type/cartItem";
-import { useEffect, useState } from "react";
-
-const ShoppingCart = ({
-  selectedItems,
-  selectedMap,
-  isAllChecked,
-  checkboxChange,
-  allCheck,
-  selectedDelete,
-  setCartItems,
-  setSelectedItems,
-}: {
-  selectedItems: CartItem[];
-  selectedMap: { [key: number]: boolean };
-  isAllChecked: boolean;
-  checkboxChange: (id: number) => void;
-  allCheck: () => void;
-  selectedDelete: () => void;
-  setCartItems: (cartItems: CartItem[]) => void;
-  setSelectedItems: (cartItems: CartItem[]) => void;
-}) => {
-  const increaseQuantity = (item: CartItem) => {
-    const updatedItems = selectedItems.map((cartItem) => {
-      if (cartItem.product.id === item.product.id) {
-        return {
-          ...cartItem,
-          quantity: cartItem.quantity + 1,
-        };
-      }
-      return cartItem;
-    });
-
-    setSelectedItems(updatedItems);
-    setCartItems(updatedItems); // 상태 동기화
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
-  };
-
-  const decreaseQuantity = (item: CartItem) => {
-    const updatedItems = selectedItems
-      .map((cartItem) => {
-        if (cartItem.product.id === item.product.id) {
-          const newQuantity = cartItem.quantity - 1;
-          if (newQuantity <= 0) return null;
-          return {
-            ...cartItem,
-            quantity: newQuantity,
-          };
-        }
-        return cartItem;
-      })
-      .filter(Boolean) as CartItem[];
-
-    setSelectedItems(updatedItems);
-    setCartItems(updatedItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
-  };
-
-  return (
-    <div className="flex flex-col px-20 py-10 bg-white pt-10 w-1/2">
-      <div className="flex items-center gap-2 mb-4 border-b border-b-gray-300 pb-3">
-        <input type="checkbox" checked={isAllChecked} onChange={allCheck} />
-        <span className="text-sm">전체 선택</span>
-        <button
-          onClick={selectedDelete}
-          className="cursor-pointer ml-53 border border-gray-300 text-sm py-1 px-3 rounded-xl"
-        >
-          선택 삭제
-        </button>
-      </div>
-
-      <ul className="w-full flex flex-col gap-4">
-        {selectedItems.map((item) => (
-          <li
-            key={item.product.id}
-            className="flex w-full gap-4 py-3 items-start"
-          >
-            <input
-              type="checkbox"
-              checked={!!selectedMap[item.product.id]}
-              onChange={() => checkboxChange(item.product.id)}
-            />
-
-            <img src={item.product.imageUrl} className="w-40 h-40" />
-
-            <div className="flex flex-col gap-8">
-              <div className="mt-3 w-full">
-                <p className="text-sm font-bold">{item.product.name}</p>
-                <p className="text-sm text-gray-500">{item.product.engName}</p>
-                <p className="text-xs mt-1">
-                  {item.quantity}개 / {item.product.price * item.quantity}원
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <img
-                  src="/images/plus.png"
-                  onClick={() => increaseQuantity(item)}
-                />
-                <p>{item.quantity}</p>
-                <img
-                  src="/images/minus.png"
-                  onClick={() => decreaseQuantity(item)}
-                />
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
+import { useState } from "react";
+import ShoppingCart from "@/commponents/ShoppingCart";
+import { useCart } from "@/hooks/useCart";
 const Order = ({
   total_price,
   total_item,
@@ -212,55 +104,7 @@ const UserInfo = ({
 };
 
 export default function Page() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("cartItems");
-
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      setCartItems(parsed);
-      setSelectedItems(parsed);
-    }
-  }, []);
-
-  const [selectedItems, setSelectedItems] = useState<CartItem[]>(cartItems);
-  const [selectedMap, setSelectedMap] = useState<{ [key: number]: boolean }>(
-    {}
-  );
-  const [isAllChecked, setIsAllChecked] = useState(false);
-
-  const checkboxChange = (id: number) => {
-    setSelectedMap((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const allCheck = () => {
-    const newCheckState: { [key: number]: boolean } = {};
-    selectedItems.forEach((item) => {
-      newCheckState[item.product.id] = !isAllChecked;
-    });
-    setSelectedMap(newCheckState);
-    setIsAllChecked(!isAllChecked);
-  };
-
-  const selectedDelete = () => {
-    const filtered = selectedItems.filter(
-      (item) => !selectedMap[item.product.id]
-    );
-    setSelectedItems(filtered);
-
-    // 체크 상태도 초기화
-    const newMap = { ...selectedMap };
-    selectedItems.forEach((item) => {
-      if (selectedMap[item.product.id]) {
-        delete newMap[item.product.id];
-      }
-    });
-    setSelectedMap(newMap);
-    setIsAllChecked(false);
-  };
-
-  const total_price = selectedItems.reduce(
+  /*const total_price = selectedItems.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
@@ -268,25 +112,16 @@ export default function Page() {
   const total_item = selectedItems.reduce(
     (sum, item) => sum + item.quantity,
     0
-  );
+  );*/
 
   return (
     <div className="h-screen bg-[#F9F9F2] flex gap-8 p-4">
-      <ShoppingCart
-        selectedItems={selectedItems}
-        selectedMap={selectedMap}
-        isAllChecked={isAllChecked}
-        checkboxChange={checkboxChange}
-        allCheck={allCheck}
-        selectedDelete={selectedDelete}
-        setCartItems={setCartItems}
-        setSelectedItems={setSelectedItems}
-      />
-      <Order
+      <ShoppingCart />
+      {/* <Order
         total_price={total_price}
         total_item={total_item}
         selectedItems={selectedItems}
-      />
+      /> */}
     </div>
   );
 }
