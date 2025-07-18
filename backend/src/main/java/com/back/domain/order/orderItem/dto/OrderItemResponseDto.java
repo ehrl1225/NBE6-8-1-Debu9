@@ -42,4 +42,3 @@ public class OrderItemResponseDto {
         return secureRandom.nextInt(max - min + 1) + min;
     }
 }
-}
