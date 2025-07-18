@@ -33,8 +33,8 @@ public class OrderController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    @Operation(summary = "주문 다건 조회")
-    public List<OrderResponseDto> getItems() { // OrderResponseDto로 변환
+    @Operation(summary = "주문 전체 조회")
+    public List<OrderResponseDto> getItems() {
         List<Order> items = orderService.findAllWithItemsAndProducts();
 
         return items
@@ -46,11 +46,11 @@ public class OrderController {
     @GetMapping("/{orderNum}")
     @Transactional(readOnly = true)
     @Operation(summary = "주문번호로 단건 조회")
-    public OrderDto getItem(@PathVariable int orderNum) {
-        Order order = orderService.findByOrderNum(orderNum)
+    public OrderResponseDto getItem(@PathVariable int orderNum) {
+        Order order = orderService.findByOrderNumWithDetails(orderNum)
                 .orElseThrow(() -> new RuntimeException("주문번호 %s에 해당하는 주문을 찾을 수 없습니다.".formatted(orderNum)));
 
-        return new OrderDto(order);
+        return new OrderResponseDto(order);
     }
 
     // email로 조회

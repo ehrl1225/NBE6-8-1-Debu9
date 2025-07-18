@@ -48,7 +48,6 @@ public class OrderService {
         return secureRandom.nextInt(999000) + 1000;
     }
 
-
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
         return orderItemRepository.findByOrderId(orderId);
     }
@@ -71,6 +70,10 @@ public class OrderService {
 
     public List<Order> findAllWithItemsAndProducts() {
         return orderRepository.findAllWithItemsAndProducts();
+    }
+
+    public Optional<Order> findByOrderNumWithDetails(int orderNum) {
+        return orderRepository.findByOrderNumWithDetails(orderNum);
     }
 
     public void flush() {
