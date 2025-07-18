@@ -8,7 +8,20 @@ const ShoppingCart = () => {
     toggleOne,
     removeSelectedItems,
     isAllSelected,
+    updateQuantity,
   } = useCart();
+
+  const increase = (id: number, currentQty: number) => {
+    updateQuantity(id, currentQty + 1);
+  };
+
+  const decrease = (id: number, currentQty: number) => {
+    if (currentQty === 1) {
+      alert("최소 주문 수량은 1개 입니다.");
+      return;
+    }
+    updateQuantity(id, currentQty - 1);
+  };
 
   return (
     <div className="flex flex-col px-20 py-10 bg-white pt-10 w-1/2">
@@ -47,13 +60,13 @@ const ShoppingCart = () => {
               </div>
               <div className="flex gap-2">
                 <img
-                  src="/images/plus.png"
-                  //   onClick={() => increaseQuantity(item)}
+                  src="/images/minus.png"
+                  onClick={() => decrease(item.product.id, item.quantity)}
                 />
                 <p>{item.quantity}</p>
                 <img
-                  src="/images/minus.png"
-                  //   onClick={() => decreaseQuantity(item)}
+                  src="/images/plus.png"
+                  onClick={() => increase(item.product.id, item.quantity)}
                 />
               </div>
             </div>

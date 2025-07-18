@@ -21,6 +21,7 @@ type CartContextType = {
   selectedItems: CartItem[];
   total_price: number;
   total_item: number;
+  updateQuantity: (productId: number, quantity: number) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -96,6 +97,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     [selectedItems]
   );
 
+  const updateQuantity = (productId: number, quantity: number) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.product.id === productId
+          ? { ...item, quantity: Math.max(1, quantity) }
+          : item
+      )
+    );
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -109,6 +120,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         selectedItems,
         total_price,
         total_item,
+        updateQuantity,
       }}
     >
       {children}
