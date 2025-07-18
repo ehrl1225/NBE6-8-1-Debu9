@@ -1,8 +1,11 @@
 package com.back.domain.order.order.entity;
 
+import com.back.domain.member.member.entity.Member;
 import com.back.domain.order.orderItem.entity.OrderItem;
+import com.back.domain.product.product.entity.Product;
 import com.back.global.jpa.entity.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -22,15 +25,16 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @Table(name = "product_orders")
 public class Order extends BaseEntity {
-    private int userId;
+    @ManyToOne(fetch = LAZY)
+    private Member user;
     private int orderNum;
     private String address;
 
     @OneToMany(mappedBy = "order", fetch = LAZY, cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-    public Order(int userId, int orderNum, String address) {
-        this.userId = userId;
+    public Order(Member user, int orderNum, String address) {
+        this.user = user;
         this.orderNum = orderNum;
         this.address = address;
     }
@@ -42,10 +46,9 @@ public class Order extends BaseEntity {
                 .findFirst();
     }
 
-    public OrderItem addItem(int productId, int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
-        OrderItem orderItem = new OrderItem(this, productId, count, expectedDeliveryDate, deliveryState);
+    public OrderItem addItem(Product product, int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
+        OrderItem orderItem = new OrderItem(this, product, count, expectedDeliveryDate, deliveryState);
         items.add(orderItem);
-
         return orderItem;
     }
 }

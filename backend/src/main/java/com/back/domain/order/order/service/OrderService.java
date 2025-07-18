@@ -20,7 +20,6 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final MemberRepository memberRepository;
 
     public long count() {
         return orderRepository.count();
@@ -34,16 +33,10 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public Order write(int userId, int productId, String address) {
-        Order order = new Order(userId, productId, address);
+    public Order write(Member user, int orderNum, String address) {
+        Order order = new Order(user, orderNum, address);
 
         return orderRepository.save(order);
-    }
-
-    public OrderItem createOrderItem(Order order, int productId, int count, String deliveryState) {
-        LocalDateTime expectedDeliveryDate = LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0);
-
-        return order.addItem(productId, count, expectedDeliveryDate, deliveryState);
     }
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
