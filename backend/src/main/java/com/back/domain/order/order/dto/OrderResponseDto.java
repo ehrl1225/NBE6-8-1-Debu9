@@ -20,9 +20,8 @@ public class OrderResponseDto {
     private String order_address;
     private int total_count;
     private String created_date;
-    private List<OrderItemResponseDto> order_items;
-    // 추가 필드
     private String email;
+    private List<OrderItemResponseDto> order_items;
 
     public OrderResponseDto(Order order) {
         this.order_id = order.getId(); // Order의 ID 매핑
