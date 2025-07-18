@@ -3,6 +3,7 @@ package com.back.domain.order.order.controller;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import com.back.domain.order.order.dto.OrderDto;
+import com.back.domain.order.order.dto.OrderResponseDto;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.order.orderItem.dto.OrderItemDto;
@@ -34,12 +35,12 @@ public class OrderController {
     @GetMapping
     @Transactional(readOnly = true)
     @Operation(summary = "주문 다건 조회")
-    public List<OrderDto> getItems() {
-        List<Order> items = orderService.findAll();
+    public List<OrderResponseDto> getItems() { // OrderResponseDto로 변환
+        List<Order> items = orderService.findAllWithItemsAndProducts();
 
         return items
                 .stream()
-                .map(OrderDto::new) // OrderDto로 변환
+                .map(OrderResponseDto::new)
                 .toList();
     }
 
@@ -47,18 +48,11 @@ public class OrderController {
     @GetMapping("/search")
     @Transactional(readOnly = true)
     @Operation(summary = "이메일로 주문 조회")
-    public List<OrderDto> getItemsByEmail(@RequestParam String memberEmail) { // @RequestParam 사용
-        Optional<Member> nullable_member = memberService.findByEmail(memberEmail);
-        if (nullable_member.isEmpty()) {
-            return List.of(); // 이메일로 회원을 찾지 못한 경우 빈 리스트 반환
-        }
-        Member member = nullable_member.get();
-        List<Order> orders = orderService.findAll().stream()
-                .filter(order -> order.getUser().getId() == member.getId())
-                .toList();
+    public List<OrderResponseDto> getItemsByEmail(@RequestParam String memberEmail) { // @RequestParam 사용
+        List<Order> orders = orderService.findAllByMemberEmail(memberEmail);
 
         return orders.stream()
-                .map(OrderDto::new)
+                .map(OrderResponseDto::new)
                 .toList();
     }
 
