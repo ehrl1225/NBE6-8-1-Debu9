@@ -1,7 +1,6 @@
 package com.back.domain.order.order.service;
 
 import com.back.domain.member.member.entity.Member;
-import com.back.domain.member.member.repository.MemberRepository;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
 import com.back.domain.order.orderItem.entity.OrderItem;
@@ -21,7 +20,6 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final MemberRepository memberRepository;
     private final SecureRandom secureRandom = new SecureRandom();
 
     public long count() {
@@ -55,7 +53,6 @@ public class OrderService {
         return orderItemRepository.findByOrderId(orderId);
     }
 
-
     public boolean delete(int id) {
         if (orderRepository.existsById(id)) {
             orderRepository.deleteById(id);
@@ -66,6 +63,14 @@ public class OrderService {
 
     public void modifyitem(OrderItem orderItem, int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
         orderItem.modify(count, expectedDeliveryDate, deliveryState);
+    }
+
+    public List<Order> findAllByMemberEmail(String email) {
+        return orderRepository.findAllByMemberEmailWithItemsAndProducts(email);
+    }
+
+    public List<Order> findAllWithItemsAndProducts() {
+        return orderRepository.findAllWithItemsAndProducts();
     }
 
     public void flush() {
