@@ -1,53 +1,21 @@
 import { Product } from "@/lib/type/product";
-import { CartItem } from "@/lib/type/cartItem";
+import { useCart } from "@/hooks/useCart";
 
-const ProdDesc = ({
+const ProductInfo = ({
   product,
   onClose,
-  cartItems,
-  setCartItems,
   quantity,
   increase,
   decrease,
-  setQuantity,
 }: {
   product: Product;
   onClose: () => void;
-  cartItems: CartItem[];
-  setCartItems: (items: CartItem[]) => void;
   quantity: number;
   increase: () => void;
   decrease: () => void;
-  setQuantity: (quantity: number) => void;
 }) => {
-  const addToCart = (product: Product, quantity: number) => {
-    const existingItemIndex = cartItems.findIndex(
-      (item) => item.product.id === product.id
-    );
+  const { addToCart } = useCart();
 
-    let updatedCart;
-
-    if (existingItemIndex !== -1) {
-      const updatedItem = {
-        ...cartItems[existingItemIndex],
-        quantity: cartItems[existingItemIndex].quantity + quantity,
-      };
-
-      updatedCart = [...cartItems];
-      updatedCart[existingItemIndex] = updatedItem;
-    } else {
-      const newItem: CartItem = {
-        product,
-        quantity,
-      };
-
-      updatedCart = [...cartItems, newItem];
-    }
-
-    setCartItems(updatedCart);
-    alert("장바구니에 담겼습니다.");
-    setQuantity(1);
-  };
   return (
     <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white border-l border-l-gray-300">
       <img
@@ -84,3 +52,5 @@ const ProdDesc = ({
     </div>
   );
 };
+
+export default ProductInfo;

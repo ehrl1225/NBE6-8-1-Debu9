@@ -43,6 +43,7 @@ export function useCart() {
     }
 
     setCartItems(updatedCart);
+    alert("장바구니에 담겼습니다.");
   };
 
   return { cartItems, setCartItems, addToCart };

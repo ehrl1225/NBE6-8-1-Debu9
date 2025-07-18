@@ -1,14 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Product } from "../../lib/type/product";
-import { CartItem } from "@/lib/type/cartItem";
 import ProductList from "@/commponents/ProductList";
 import ProductInfo from "@/commponents/ProductInfo";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]); //상품 목록
   const [selectedProd, setSelectedProd] = useState<Product | null>(null); //상품 상세 내용
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [quantity, setQuantity] = useState<number>(1);
 
   useEffect(() => {
@@ -41,12 +39,9 @@ export default function Page() {
         <ProductInfo
           product={selectedProd}
           onClose={() => setSelectedProd(null)}
-          cartItems={cartItems}
-          setCartItems={setCartItems}
           quantity={quantity}
           increase={increase}
           decrease={decrease}
-          setQuantity={setQuantity}
         />
       )}
     </>
