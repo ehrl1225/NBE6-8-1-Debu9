@@ -5,11 +5,11 @@ import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
 import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.domain.order.orderItem.repository.OrderItemRepository;
+import com.back.global.util.NumberGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,6 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final SecureRandom secureRandom = new SecureRandom();
 
     public long count() {
         return orderRepository.count();
@@ -44,10 +43,8 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public int generateUniqueNum(int digits) {
-        int min = (int) Math.pow(10, digits - 1);
-        int max = (int) Math.pow(10, digits) - 1;
-        return secureRandom.nextInt(max - min + 1) + min;
+    public int generateUniqueNum() {
+        return NumberGenerator.generateRandomNumber(6);
     }
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {

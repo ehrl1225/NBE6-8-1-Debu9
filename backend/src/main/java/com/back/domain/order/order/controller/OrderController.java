@@ -89,7 +89,7 @@ public class OrderController {
     public RsData<OrderDto> write(@Valid @RequestBody OrderWriteReqBody reqBody) {
         Optional<Member> nullable_actor = memberService.findByEmail(reqBody.email);
         Member actor = nullable_actor.orElseGet(() -> memberService.save(reqBody.email));
-        int orderNum = orderService.generateUniqueNum(6);
+        int orderNum = orderService.generateUniqueNum();
         Order order = orderService.write(actor, orderNum, reqBody.address);
 
         reqBody.items.stream()
