@@ -1,6 +1,8 @@
+"use client";
 import { Product } from "@/lib/type/product";
 import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
+
 const ProductInfo = ({
   product,
   onClose,
