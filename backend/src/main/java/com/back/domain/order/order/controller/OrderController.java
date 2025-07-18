@@ -77,7 +77,7 @@ public class OrderController {
     public RsData<OrderDto> write(@Valid @RequestBody OrderWriteReqBody reqBody) {
         Optional<Member> nullable_actor = memberService.findByEmail(reqBody.email);
         Member actor = nullable_actor.orElseGet(() -> memberService.save(reqBody.email));
-        int orderNum = UUIDToInt.generateIntFromUUID();
+        int orderNum = orderService.generateUniqueOrderNum();
         Order order = orderService.write(actor, orderNum, reqBody.address);
 
         reqBody.items.stream()

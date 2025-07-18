@@ -46,7 +46,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    private int generateUniqueOrderNum() {
+    public int generateUniqueOrderNum() {
         return secureRandom.nextInt(999000) + 1000;
     }
 
