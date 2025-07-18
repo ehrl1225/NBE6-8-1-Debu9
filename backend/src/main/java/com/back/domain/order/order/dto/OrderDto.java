@@ -18,7 +18,7 @@ public record OrderDto (
                 order.getId(),
                 order.getCreateDate(),
                 order.getModifyDate(),
-                order.getUserId(),
+                order.getUser().getId(),
                 order.getOrderNum(),
                 order.getAddress()
         );

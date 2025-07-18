@@ -21,7 +21,7 @@ public record OrderItemDto(
                 orderItem.getCreateDate(),
                 orderItem.getModifyDate(),
                 orderItem.getOrder().getId(),
-                orderItem.getProductId(),
+                orderItem.getProduct().getId(),
                 orderItem.getCount(),
                 orderItem.getExpectedDeliveryDate(),
                 orderItem.getDeliveryState()

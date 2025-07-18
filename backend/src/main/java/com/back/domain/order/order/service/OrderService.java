@@ -1,5 +1,7 @@
 package com.back.domain.order.order.service;
 
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.repository.MemberRepository;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
 import com.back.domain.order.orderItem.entity.OrderItem;
@@ -31,22 +33,16 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public Order write(int userId, int productId, String address) {
-        Order order = new Order(userId, productId, address);
+    public Order write(Member user, int orderNum, String address) {
+        Order order = new Order(user, orderNum, address);
 
         return orderRepository.save(order);
-    }
-
-    @Transactional
-    public OrderItem createOrderItem(int orderId, int productId, int count, String deliveryState) {
-        LocalDateTime expectedDeliveryDate = LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0);
-        OrderItem orderItem = new OrderItem(orderId, productId, count, expectedDeliveryDate, deliveryState);
-        return orderItemRepository.save(orderItem);
     }
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
         return orderItemRepository.findByOrderId(orderId);
     }
+
 
     public boolean delete(int id) {
         if (orderRepository.existsById(id)) {
@@ -58,5 +54,9 @@ public class OrderService {
 
     public void modifyitem(OrderItem orderItem, int count, LocalDateTime expectedDeliveryDate, String deliveryState) {
         orderItem.modify(count, expectedDeliveryDate, deliveryState);
+    }
+
+    public void flush() {
+        orderRepository.flush();
     }
 }
