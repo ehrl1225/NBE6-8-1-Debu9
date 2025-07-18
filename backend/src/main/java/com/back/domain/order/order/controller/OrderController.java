@@ -53,6 +53,26 @@ public class OrderController {
         return new OrderDto(order);
     }
 
+    // email로 조회
+    @GetMapping("/{memberEmail}")
+    @Transactional(readOnly = true)
+    @Operation(summary = "이메일로 주문 조회")
+    public List<OrderDto> getItems(@PathVariable String memberEmail) {
+        Optional<Member> nullable_member = memberService.findByEmail(memberEmail);
+        if (nullable_member.isEmpty()) {
+            return List.of(); // 이메일로 회원을 찾지 못한 경우 빈 리스트 반환
+        }
+        Member member = nullable_member.get();
+        List<Order> orders = orderService.findAll().stream()
+                .filter(order -> order.getUser().getId() == member.getId())
+                .toList();
+
+        return orders.stream()
+                .map(OrderDto::new)
+                .toList();
+    }
+
+
     record OrderItemWriteReqBody(
             @NotNull
             int productId,
