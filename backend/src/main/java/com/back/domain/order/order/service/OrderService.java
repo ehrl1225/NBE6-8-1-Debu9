@@ -6,6 +6,7 @@ import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
 import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.domain.order.orderItem.repository.OrderItemRepository;
+import com.back.domain.product.product.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +35,10 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public Order write(int userId, int productId, String address) {
-        Order order = new Order(userId, productId, address);
+    public Order write(Member user, int orderNum, String address) {
+        Order order = new Order(user, orderNum, address);
 
         return orderRepository.save(order);
-    }
-
-    public OrderItem createOrderItem(Order order, int productId, int count, String deliveryState) {
-        LocalDateTime expectedDeliveryDate = LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0);
-
-        return order.addItem(productId, count, expectedDeliveryDate, deliveryState);
     }
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {

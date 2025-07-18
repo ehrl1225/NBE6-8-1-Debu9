@@ -1,21 +1,28 @@
 package com.back.domain.order.order.controller;
 
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.service.MemberService;
 import com.back.domain.order.order.dto.OrderDto;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.order.orderItem.dto.OrderItemDto;
 import com.back.domain.order.orderItem.entity.OrderItem;
+import com.back.domain.order.orderItem.service.OrderItemService;
 import com.back.global.rsData.RsData;
+import com.back.global.util.UUIDToInt;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -23,6 +30,8 @@ import java.util.List;
 @Tag(name = "OrderController", description = "API 주문 컨트롤러")
 public class OrderController {
     private final OrderService orderService;
+    private final MemberService memberService;
+    private final OrderItemService orderItemService;
 
     @GetMapping
     @Transactional(readOnly = true)
@@ -46,28 +55,49 @@ public class OrderController {
         return new OrderDto(order);
     }
 
-    record OrderWriteReqBody(
-            @NotNull
-            int userId,
+    record OrderItemWriteReqBody(
             @NotNull
             int productId,
+            @NotNull
+            int count
+    ) { }
+
+    record OrderWriteReqBody(
+            @NotNull
+            String email,
             @NotBlank
-            String address
+            String address,
+            @NotNull
+            List<OrderItemWriteReqBody> items
     ) {
     }
+
 
     @PostMapping
     @Transactional
     @Operation(summary = "주문 생성")
     public RsData<OrderDto> write(@Valid @RequestBody OrderWriteReqBody reqBody) {
-        Order order = orderService.write(reqBody.userId, reqBody.productId, reqBody.address);
+        Optional<Member> nullable_actor = memberService.findByEmail(reqBody.email);
+        Member actor = nullable_actor.orElseGet(() -> memberService.save(reqBody.email));
+        int orderNum = UUIDToInt.generateIntFromUUID();
+        Order order = orderService.write(actor, orderNum, reqBody.address);
 
+        reqBody.items.stream()
+                .map(item ->
+                        orderItemService.createOrderItem(
+                                order,
+                                item.productId,
+                                item.count,
+                                "배송준비중"
+                        )
+                ).toList();
         return new RsData<>(
                 "201-1",
                 "%d번 글이 작성되었습니다.".formatted(order.getId()),
                 new OrderDto(order)
         );
     }
+
 
     @GetMapping("/{orderId}/delivery-schedule")
     @Transactional(readOnly = true)

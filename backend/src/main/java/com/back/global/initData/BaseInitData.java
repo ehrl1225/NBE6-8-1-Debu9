@@ -1,5 +1,7 @@
 package com.back.global.initData;
 
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.service.MemberService;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.product.product.entity.Product;
@@ -22,6 +24,7 @@ public class BaseInitData {
     private BaseInitData self;
     private final ProductService productService;
     private final OrderService orderService;
+    private final MemberService memberService;
 
     @Bean
     ApplicationRunner baseInitDataApplicationRunner() {
@@ -46,13 +49,16 @@ public class BaseInitData {
         if (orderService.count() > 0) return;
 
         // 3. 하드코딩된 ID 대신 실제 Product 객체의 ID를 사용
-        Order order1 = orderService.write(1, products.get(0).getId(), "서울시 강남구 역삼동");
-        Order order2 = orderService.write(2, products.get(1).getId(), "대전광역시 동구 자양동");
-        Order order3 = orderService.write(3, products.get(2).getId(), "부산광역시 해운대구 우동");
+        Member user1 = memberService.findById(1).orElseThrow(() -> new IllegalArgumentException("User with ID 1 does not exist."));
+        Member user2 = memberService.findById(2).orElseThrow(() -> new IllegalArgumentException("User with ID 2 does not exist."));
+        Member user3 = memberService.findById(3).orElseThrow(() -> new IllegalArgumentException("User with ID 3 does not exist."));
+        Order order1 = orderService.write(user1, products.get(0).getId(), "서울시 강남구 역삼동");
+        Order order2 = orderService.write(user2, products.get(1).getId(), "대전광역시 동구 자양동");
+        Order order3 = orderService.write(user3, products.get(2).getId(), "부산광역시 해운대구 우동");
 
-        order1.addItem(products.get(0).getId(), 2, null, "상품 준비 중");
-        order1.addItem(products.get(1).getId(), 1, null, "배송중");
-        order2.addItem(products.get(1).getId(), 3, null, "배송완료");
+        order1.addItem(products.get(0), 2, null, "상품 준비 중");
+        order1.addItem(products.get(1), 1, null, "배송중");
+        order2.addItem(products.get(1), 3, null, "배송완료");
     }
 
     @Transactional
