@@ -1,4 +1,5 @@
 "use client"
+
 import { useEffect, useState } from "react"
 import type {components} from "@/lib/backend/apiV1/schema"
 
@@ -12,25 +13,30 @@ function safeParseInt(str: string): number {
 function Product({product}:{product:ProductDto}){
     const [bean, setBean] = useState<ProductDto>(product);
 
+    const onModify = () => {
+        
+    }
+
+    const onDelete = () => {
+        
+    }
+
     return (
         <div className="border rounded my-2 p-2">
-            <form>
-                <div className="flex">
-                    <div>
-                        <input type="text" className="border block" value={bean.name} onChange={(e)=>{setBean({...bean, name:e.target.value});}}></input>
-                        <input type="text" className="border block mt-3" value={bean.engName} onChange={(e)=>{setBean({...bean, engName:e.target.value})}}></input>
-                        <input type="number" className="border block mt-3" value={bean.price} onChange={(e)=>{setBean({...bean, price:safeParseInt(e.target.value)})}}></input>
-                        <input type="text" className="border block mt-3" value={bean.imageUrl} onChange={(e)=>{setBean({...bean, imageUrl:e.target.value})}}></input>
-                    </div>
-                    <img src={bean.imageUrl} className="ml-10 w-[100] h-[100] object-cover"></img>
+            <div className="flex">
+                <div>
+                    <input type="text" className="border block" value={bean.name} onChange={(e)=>{setBean({...bean, name:e.target.value});}}></input>
+                    <input type="text" className="border block mt-3" value={bean.engName} onChange={(e)=>{setBean({...bean, engName:e.target.value})}}></input>
+                    <input type="number" className="border block mt-3" value={bean.price} onChange={(e)=>{setBean({...bean, price:safeParseInt(e.target.value)})}}></input>
+                    <input type="text" className="border block mt-3" value={bean.imageUrl} onChange={(e)=>{setBean({...bean, imageUrl:e.target.value})}}></input>
                 </div>
+                <img src={bean.imageUrl} className="ml-10 w-[100] h-[100] object-cover"></img>
+            </div>
 
-                <textarea className="border block mt-3" rows={10} cols={50} value={bean.info} onChange={(e)=>{setBean({...bean, info:e.target.value})}}></textarea>
-
-            </form>
+            <textarea className="border block mt-3" rows={10} cols={50} value={bean.info} onChange={(e)=>{setBean({...bean, info:e.target.value})}}></textarea>
             <div className="flex justify-between">
-                <button className="p-2 cursor-pointer">수정</button>
-                <button className="p-2 cursor-pointer">삭제</button>
+                <button className="p-2 cursor-pointer" onClick={onModify}>수정</button>
+                <button className="p-2 cursor-pointer" onClick={onDelete}>삭제</button>
             </div>
         </div>
     )
@@ -47,9 +53,15 @@ export default function(){
         })()
 
     }, []);
+
+    const onAdd = () => {
+        
+    }
+
     return (
-        <div className="text-black flex justify-center">
+        <div className="text-black flex justify-center mt-10">
             <div>
+                <button className="cursor-pointer flex justify-self-end border rounded p-2" onClick={()=>{}}>추가</button>
                 {products.map((e)=><Product product={e} key={e.id}></Product>)}
             </div>
         </div>
