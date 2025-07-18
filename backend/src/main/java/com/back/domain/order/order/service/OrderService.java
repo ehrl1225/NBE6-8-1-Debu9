@@ -5,11 +5,11 @@ import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.repository.OrderRepository;
 import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.domain.order.orderItem.repository.OrderItemRepository;
+import com.back.global.util.NumberGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,22 +20,13 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final SecureRandom secureRandom = new SecureRandom();
 
     public long count() {
         return orderRepository.count();
     }
 
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
-
     public Optional<Order> findById(int id) {
         return orderRepository.findById(id);
-    }
-
-    public Optional<Order> findByOrderNum(int orderNum) {
-        return orderRepository.findByOrderNum(orderNum);
     }
 
     public Order write(Member user, int orderNum, String address) {
@@ -44,10 +35,9 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public int generateUniqueOrderNum() {
-        return secureRandom.nextInt(999000) + 1000;
+    public int generateUniqueNum() {
+        return NumberGenerator.generateRandomNumber(6);
     }
-
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
         return orderItemRepository.findByOrderId(orderId);
@@ -71,6 +61,10 @@ public class OrderService {
 
     public List<Order> findAllWithItemsAndProducts() {
         return orderRepository.findAllWithItemsAndProducts();
+    }
+
+    public Optional<Order> findByOrderNumWithDetails(int orderNum) {
+        return orderRepository.findByOrderNumWithDetails(orderNum);
     }
 
     public void flush() {
