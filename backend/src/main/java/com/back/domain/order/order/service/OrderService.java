@@ -25,16 +25,8 @@ public class OrderService {
         return orderRepository.count();
     }
 
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
-
     public Optional<Order> findById(int id) {
         return orderRepository.findById(id);
-    }
-
-    public Optional<Order> findByOrderNum(int orderNum) {
-        return orderRepository.findByOrderNum(orderNum);
     }
 
     public Order write(Member user, int orderNum, String address) {

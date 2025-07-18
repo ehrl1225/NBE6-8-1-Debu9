@@ -18,9 +18,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT o FROM Order o JOIN FETCH o.items oi JOIN FETCH oi.product p")
     List<Order> findAllWithItemsAndProducts();
 
-    // 필요 없을 시 추후 삭제
-    Optional<Order> findByOrderNum(int orderNum);
-
     // 주문번호로 단건 조회 시 Order, OrderItem, Product, Member 정보까지 한 번에 가져오는 Fetch Join 쿼리
     @Query("SELECT o FROM Order o " +
             "JOIN FETCH o.items oi " +
