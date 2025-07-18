@@ -1,7 +1,7 @@
 "use client";
 import { CartItem } from "../../lib/type/cartItem";
 import { useEffect, useState } from "react";
-import { dummyCartItems } from "../data/dummydata";
+
 const ShoppingCart = ({
   selectedItems,
   selectedMap,
@@ -9,6 +9,8 @@ const ShoppingCart = ({
   checkboxChange,
   allCheck,
   selectedDelete,
+  setCartItems,
+  setSelectedItems,
 }: {
   selectedItems: CartItem[];
   selectedMap: { [key: number]: boolean };
@@ -16,7 +18,45 @@ const ShoppingCart = ({
   checkboxChange: (id: number) => void;
   allCheck: () => void;
   selectedDelete: () => void;
+  setCartItems: (cartItems: CartItem[]) => void;
+  setSelectedItems: (cartItems: CartItem[]) => void;
 }) => {
+  const increaseQuantity = (item: CartItem) => {
+    const updatedItems = selectedItems.map((cartItem) => {
+      if (cartItem.product.id === item.product.id) {
+        return {
+          ...cartItem,
+          quantity: cartItem.quantity + 1,
+        };
+      }
+      return cartItem;
+    });
+
+    setSelectedItems(updatedItems);
+    setCartItems(updatedItems); // 상태 동기화
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+  };
+
+  const decreaseQuantity = (item: CartItem) => {
+    const updatedItems = selectedItems
+      .map((cartItem) => {
+        if (cartItem.product.id === item.product.id) {
+          const newQuantity = cartItem.quantity - 1;
+          if (newQuantity <= 0) return null;
+          return {
+            ...cartItem,
+            quantity: newQuantity,
+          };
+        }
+        return cartItem;
+      })
+      .filter(Boolean) as CartItem[];
+
+    setSelectedItems(updatedItems);
+    setCartItems(updatedItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+  };
+
   return (
     <div className="flex flex-col px-20 py-10 bg-white pt-10 w-1/2">
       <div className="flex items-center gap-2 mb-4 border-b border-b-gray-300 pb-3">
@@ -41,19 +81,28 @@ const ShoppingCart = ({
               checked={!!selectedMap[item.product.id]}
               onChange={() => checkboxChange(item.product.id)}
             />
-            <img
-              src={item.product.imageUrl}
-              className="w-24 h-24 object-cover"
-            />
-            <div className="mt-3 w-full">
-              <p className="text-sm font-bold">{item.product.name}</p>
-              <p className="text-sm text-gray-500">{item.product.engName}</p>
-              <p className="text-xs mt-1">
-                {item.quantity}개 / {item.product.price * item.quantity}원
-              </p>
-              <button className="cursor-pointer border border-gray-300 text-sm py-1 px-3 ml-40 rounded-xl">
-                옵션 변경
-              </button>
+
+            <img src={item.product.imageUrl} className="w-40 h-40" />
+
+            <div className="flex flex-col gap-8">
+              <div className="mt-3 w-full">
+                <p className="text-sm font-bold">{item.product.name}</p>
+                <p className="text-sm text-gray-500">{item.product.engName}</p>
+                <p className="text-xs mt-1">
+                  {item.quantity}개 / {item.product.price * item.quantity}원
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <img
+                  src="/images/plus.png"
+                  onClick={() => increaseQuantity(item)}
+                />
+                <p>{item.quantity}</p>
+                <img
+                  src="/images/minus.png"
+                  onClick={() => decreaseQuantity(item)}
+                />
+              </div>
             </div>
           </li>
         ))}
@@ -61,17 +110,24 @@ const ShoppingCart = ({
     </div>
   );
 };
+
 const Order = ({
   total_price,
   total_item,
+  selectedItems,
 }: {
   total_price: number;
   total_item: number;
+  selectedItems: CartItem[];
 }) => {
   return (
     <div className="border-l border-l-gray-300 pt-10 px-20 w-1/2 flex flex-col gap-8">
       <OrderSummary total_price={total_price} />
-      <UserInfo total_price={total_price} total_item={total_item} />
+      <UserInfo
+        total_price={total_price}
+        total_item={total_item}
+        selectedItems={selectedItems}
+      />
     </div>
   );
 };
@@ -89,27 +145,67 @@ const OrderSummary = ({ total_price }: { total_price: number }) => {
 const UserInfo = ({
   total_price,
   total_item,
+  selectedItems,
 }: {
   total_price: number;
   total_item: number;
+  selectedItems: CartItem[];
 }) => {
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+
+  const orderSubmit = async () => {
+    const orderData = {
+      email: email,
+      address: address,
+      items: selectedItems.map((item) => ({
+        productId: item.product.id,
+        count: item.quantity,
+      })),
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+      console.log("보낼 주문 데이터:", orderData);
+
+      const result = await response.json();
+      console.log("주문 응답:", result);
+      alert("주문이 완료되었습니다.");
+    } catch (err) {
+      console.error("주문 실패:", err);
+      alert("주문을 실패하였습니다.");
+    }
+  };
   return (
     <div className="flex flex-col gap-4">
       <p className="text-xl font-semibold mb-5">구매자 정보</p>
       <label>이메일</label>
       <input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         placeholder="email"
         className="border border-gray-300 bg-white rounded-lg px-3 py-2
         bg-[url('/images/email.png')] bg-no-repeat bg-[length:20px_20px] bg-[position:15px_center] pl-15"
       />
       <label>주소</label>
       <input
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
         placeholder="address"
         className="border border-gray-300 bg-white rounded-lg px-3 py-2
         bg-[url('/images/address.png')] bg-no-repeat bg-[length:20px_20px] bg-[position:15px_center] pl-15"
       />
-      <button className="mt-10 cursor-pointer mt-4 px-4 py-2 bg-[#005034] text-white rounded">
-        {total_price}원 결제하기 ({total_item}개)
+      <button
+        onClick={orderSubmit}
+        className="mt-10 cursor-pointer mt-4 px-4 py-2 bg-[#005034] text-white rounded"
+      >
+        {total_price}원 주문하기 ({total_item}개)
       </button>
     </div>
   );
@@ -183,8 +279,14 @@ export default function Page() {
         checkboxChange={checkboxChange}
         allCheck={allCheck}
         selectedDelete={selectedDelete}
+        setCartItems={setCartItems}
+        setSelectedItems={setSelectedItems}
       />
-      <Order total_price={total_price} total_item={total_item} />
+      <Order
+        total_price={total_price}
+        total_item={total_item}
+        selectedItems={selectedItems}
+      />
     </div>
   );
 }
