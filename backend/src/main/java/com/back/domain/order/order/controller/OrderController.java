@@ -33,8 +33,8 @@ public class OrderController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    @Operation(summary = "주문 다건 조회")
-    public List<OrderResponseDto> getItems() { // OrderResponseDto로 변환
+    @Operation(summary = "주문 전체 조회")
+    public List<OrderResponseDto> getItems() {
         List<Order> items = orderService.findAllWithItemsAndProducts();
 
         return items
@@ -46,11 +46,11 @@ public class OrderController {
     @GetMapping("/{orderNum}")
     @Transactional(readOnly = true)
     @Operation(summary = "주문번호로 단건 조회")
-    public OrderDto getItem(@PathVariable int orderNum) {
-        Order order = orderService.findByOrderNum(orderNum)
+    public OrderResponseDto getItem(@PathVariable int orderNum) {
+        Order order = orderService.findByOrderNumWithDetails(orderNum)
                 .orElseThrow(() -> new RuntimeException("주문번호 %s에 해당하는 주문을 찾을 수 없습니다.".formatted(orderNum)));
 
-        return new OrderDto(order);
+        return new OrderResponseDto(order);
     }
 
     // email로 조회
@@ -89,7 +89,7 @@ public class OrderController {
     public RsData<OrderDto> write(@Valid @RequestBody OrderWriteReqBody reqBody) {
         Optional<Member> nullable_actor = memberService.findByEmail(reqBody.email);
         Member actor = nullable_actor.orElseGet(() -> memberService.save(reqBody.email));
-        int orderNum = orderService.generateUniqueOrderNum();
+        int orderNum = orderService.generateUniqueNum();
         Order order = orderService.write(actor, orderNum, reqBody.address);
 
         reqBody.items.stream()
@@ -103,7 +103,7 @@ public class OrderController {
                 ).toList();
         return new RsData<>(
                 "201-1",
-                "%d번 글이 작성되었습니다.".formatted(order.getId()),
+                "%d번 주문이 생성되었습니다.".formatted(order.getId()),
                 new OrderDto(order)
         );
     }

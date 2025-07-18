@@ -1,6 +1,7 @@
 package com.back.domain.order.orderItem.dto;
 
 import com.back.domain.order.orderItem.entity.OrderItem;
+import com.back.global.util.NumberGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class OrderItemResponseDto {
     private int price;
     private String image_url;
     private int count;
+    private int orderItemNumber; // OrderItem의 고유 번호
 
     public OrderItemResponseDto(OrderItem orderItem) {
         this.orderItem_id = orderItem.getId(); // OrderItem의 ID 매핑
@@ -25,5 +27,6 @@ public class OrderItemResponseDto {
         this.price = orderItem.getProduct().getPrice();
         this.image_url = orderItem.getProduct().getImageUrl();
         this.count = orderItem.getCount();
+        this.orderItemNumber = NumberGenerator.generateRandomNumber(8);
     }
 }
