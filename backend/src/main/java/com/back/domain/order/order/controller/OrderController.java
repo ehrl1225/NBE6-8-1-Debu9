@@ -103,7 +103,7 @@ public class OrderController {
                 ).toList();
         return new RsData<>(
                 "201-1",
-                "%d번 글이 작성되었습니다.".formatted(order.getId()),
+                "%d번 주문이 생성되었습니다.".formatted(order.getId()),
                 new OrderDto(order)
         );
     }
