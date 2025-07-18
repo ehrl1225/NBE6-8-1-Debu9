@@ -44,8 +44,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public int generateUniqueOrderNum() {
-        return secureRandom.nextInt(999000) + 1000;
+    public int generateUniqueNum(int digits) {
+        int min = (int) Math.pow(10, digits - 1);
+        int max = (int) Math.pow(10, digits) - 1;
+        return secureRandom.nextInt(max - min + 1) + min;
     }
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
