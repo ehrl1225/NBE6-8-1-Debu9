@@ -22,6 +22,11 @@ public class MemberService {
         return member;
     }
 
+    public Member write(String email){
+        Member member = new Member(email);
+        return memberRepository.save(member);
+    }
+
     public Optional<Member> findById(int id) {
         return memberRepository.findById(id);
     }
