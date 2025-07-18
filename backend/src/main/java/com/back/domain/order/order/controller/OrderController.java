@@ -43,21 +43,11 @@ public class OrderController {
                 .toList();
     }
 
-    // id로 조회
-    @GetMapping("/{id}")
-    @Transactional(readOnly = true)
-    @Operation(summary = "주문 단건 조회")
-    public OrderDto getItem(@PathVariable int id) {
-        Order order = orderService.findById(id).get();
-
-        return new OrderDto(order);
-    }
-
     // email로 조회
-    @GetMapping("/{memberEmail}")
+    @GetMapping("/search")
     @Transactional(readOnly = true)
     @Operation(summary = "이메일로 주문 조회")
-    public List<OrderDto> getItems(@PathVariable String memberEmail) {
+    public List<OrderDto> getItemsByEmail(@RequestParam String memberEmail) { // @RequestParam 사용
         Optional<Member> nullable_member = memberService.findByEmail(memberEmail);
         if (nullable_member.isEmpty()) {
             return List.of(); // 이메일로 회원을 찾지 못한 경우 빈 리스트 반환
