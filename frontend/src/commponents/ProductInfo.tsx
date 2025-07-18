@@ -1,20 +1,26 @@
 import { Product } from "@/lib/type/product";
 import { useCart } from "@/hooks/useCart";
-
+import { useState } from "react";
 const ProductInfo = ({
   product,
   onClose,
-  quantity,
-  increase,
-  decrease,
 }: {
   product: Product;
   onClose: () => void;
-  quantity: number;
-  increase: () => void;
-  decrease: () => void;
 }) => {
   const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState<number>(1); //장바구니에 담을 수량 (초기값 1)
+
+  const increase = () => {
+    setQuantity(quantity + 1);
+  };
+  const decrease = () => {
+    if (quantity == 1) {
+      alert("최소 주문 수량은 1개 입니다.");
+      return;
+    }
+    setQuantity(quantity - 1);
+  };
 
   return (
     <div className="absolute top-0 w-[50%] h-full left-[50%] bg-white border-l border-l-gray-300">
@@ -35,8 +41,7 @@ const ProductInfo = ({
           <p className="text-xs">{product.price}원</p>
           <div className="flex gap-2 mt-3">
             <img onClick={decrease} src="/images/minus.png" />
-
-            {quantity}
+            <p>{quantity}</p>
             <img onClick={increase} src="/images/plus.png" />
           </div>
           <button
