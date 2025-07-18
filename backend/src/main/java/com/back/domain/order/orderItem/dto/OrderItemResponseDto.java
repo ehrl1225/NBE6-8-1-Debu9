@@ -16,6 +16,7 @@ public class OrderItemResponseDto {
     private int price;
     private String image_url;
     private int count;
+    private int orderItemNumber; // OrderItem의 고유 번호 (orderService의 generateUniqueOrderNum 수정 후 사용)
 
     public OrderItemResponseDto(OrderItem orderItem) {
         this.orderItem_id = orderItem.getId(); // OrderItem의 ID 매핑
@@ -25,5 +26,6 @@ public class OrderItemResponseDto {
         this.price = orderItem.getProduct().getPrice();
         this.image_url = orderItem.getProduct().getImageUrl();
         this.count = orderItem.getCount();
+        this.orderItemNumber = orderItem.getOrder().getOrderNum(); // OrderItem의 고유 번호 (Order의 주문 번호)
     }
 }
