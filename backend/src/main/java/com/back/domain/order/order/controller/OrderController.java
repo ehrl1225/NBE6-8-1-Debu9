@@ -10,7 +10,6 @@ import com.back.domain.order.orderItem.dto.OrderItemDto;
 import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.domain.order.orderItem.service.OrderItemService;
 import com.back.global.rsData.RsData;
-import com.back.global.util.UUIDToInt;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -44,6 +43,16 @@ public class OrderController {
                 .toList();
     }
 
+    @GetMapping("/{orderNum}")
+    @Transactional(readOnly = true)
+    @Operation(summary = "주문번호로 단건 조회")
+    public OrderDto getItem(@PathVariable int orderNum) {
+        Order order = orderService.findByOrderNum(orderNum)
+                .orElseThrow(() -> new RuntimeException("주문번호 %s에 해당하는 주문을 찾을 수 없습니다.".formatted(orderNum)));
+
+        return new OrderDto(order);
+    }
+
     // email로 조회
     @GetMapping("/search")
     @Transactional(readOnly = true)
@@ -55,7 +64,6 @@ public class OrderController {
                 .map(OrderResponseDto::new)
                 .toList();
     }
-
 
     record OrderItemWriteReqBody(
             @NotNull
@@ -81,7 +89,7 @@ public class OrderController {
     public RsData<OrderDto> write(@Valid @RequestBody OrderWriteReqBody reqBody) {
         Optional<Member> nullable_actor = memberService.findByEmail(reqBody.email);
         Member actor = nullable_actor.orElseGet(() -> memberService.save(reqBody.email));
-        int orderNum = UUIDToInt.generateIntFromUUID();
+        int orderNum = orderService.generateUniqueOrderNum();
         Order order = orderService.write(actor, orderNum, reqBody.address);
 
         reqBody.items.stream()

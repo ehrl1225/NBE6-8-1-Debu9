@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,7 @@ import static jakarta.persistence.FetchType.LAZY;
 public class Order extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Member user;
+    @Column(unique = true, nullable = false)
     private int orderNum;
     private String address;
 

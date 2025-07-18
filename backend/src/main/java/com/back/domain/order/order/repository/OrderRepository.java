@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
@@ -15,5 +16,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT o FROM Order o JOIN FETCH o.items oi JOIN FETCH oi.product p")
     List<Order> findAllWithItemsAndProducts();
+
+    Optional<Order> findByOrderNum(int orderNum);
+
 }
 

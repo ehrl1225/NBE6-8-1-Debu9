@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public long count() {
         return orderRepository.count();
@@ -32,11 +34,20 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
+    public Optional<Order> findByOrderNum(int orderNum) {
+        return orderRepository.findByOrderNum(orderNum);
+    }
+
     public Order write(Member user, int orderNum, String address) {
         Order order = new Order(user, orderNum, address);
 
         return orderRepository.save(order);
     }
+
+    public int generateUniqueOrderNum() {
+        return secureRandom.nextInt(999000) + 1000;
+    }
+
 
     public List<OrderItem> getOrderItemsByOrderId(int orderId) {
         return orderItemRepository.findByOrderId(orderId);
