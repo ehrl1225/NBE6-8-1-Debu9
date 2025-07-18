@@ -25,8 +25,8 @@ export default function Page({params}: {params:Promise<{order_number:string}>}){
         total_price:1000,
         order_items:[
             {
-                order_id: 1,
-                dilivery_state: "배송중",
+                order_item_num: 1,
+                delivery_state: "배송중",
                 product_name: "스타버구 블렌드1",
                 product_eng_name: "Starbu9 Blend1",
                 price: 20000,
@@ -34,8 +34,8 @@ export default function Page({params}: {params:Promise<{order_number:string}>}){
                 count:1
               },
               {
-                order_id: 2,
-                dilivery_state: "배송중",
+                order_item_num: 2,
+                delivery_state: "배송중",
                 product_name: "스타버구 블렌드2",
                 product_eng_name: "Starbu9 Blend2",
                 price: 20000,
@@ -43,8 +43,8 @@ export default function Page({params}: {params:Promise<{order_number:string}>}){
                 count:1
               },
               {
-                order_id: 3,
-                dilivery_state: "배송중",
+                order_item_num: 3,
+                delivery_state: "배송중",
                 product_name: "스타버구 블렌드3",
                 product_eng_name: "Starbu9 Blend3",
                 price: 20000,
@@ -52,8 +52,8 @@ export default function Page({params}: {params:Promise<{order_number:string}>}){
                 count:1
               },
               {
-                order_id: 4,
-                dilivery_state: "배송중",
+                order_item_num: 4,
+                delivery_state: "배송중",
                 product_name: "스타버구 블렌드4",
                 product_eng_name: "Starbu9 Blend4",
                 price: 20000,
@@ -75,7 +75,7 @@ export default function Page({params}: {params:Promise<{order_number:string}>}){
                     <a className="ml-3">주문 번호 : {data.order_number}</a>
                 </div>
                 <ul className="mb-4">
-                    {data.order_items.map((e)=><OrderItem orderItem={e} key={e.order_id}></OrderItem>)}
+                    {data.order_items.map((e)=><OrderItem orderItem={e} key={e.order_item_num}></OrderItem>)}
                 </ul>
                 <a className="text-xl font-semibold mt-10 block">받는사람 정보</a>
                 <hr className="border-1"></hr>

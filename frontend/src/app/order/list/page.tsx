@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 
 interface OrderItem{
-    order_id:number,
-    dilivery_state:string,
+    order_item_num:number,
+    delivery_state:string,
     product_name:string,
     product_eng_name:string,
     price:number,
@@ -13,7 +13,6 @@ interface OrderItem{
 };
 
 interface Order{
-    num:number,
     order_number:string,
     order_address:string,
     total_price:number,
@@ -26,7 +25,7 @@ export function OrderItem({orderItem}:{orderItem:OrderItem}){
     return (
         <div className='border my-2 rounded-xl flex border-gray-300'>
             <div className='p-2'>
-                <a className='font-bold text-xl'>{orderItem.dilivery_state}</a>
+                <a className='font-bold text-xl'>{orderItem.delivery_state}</a>
                 <div className='flex'>
                     <img src={orderItem.image_url} className='w-[100] h-[100] object-cover'></img>
                     <div>
@@ -46,7 +45,7 @@ export function OrderItem({orderItem}:{orderItem:OrderItem}){
 
             <div className='border-l border-l-gray-300 ml-3 px-2'>
                 <div className='border rounded my-2 border-gray-300'>
-                    <a className='text-center block m-1 p-1'>배송 조회</a>
+                    <Link href={`/order/delivery/${orderItem.order_item_num}`} className='text-center block m-1 p-1'>배송 조회</Link>
                 </div>
                 <div className='border rounded my-2 border-gray-300'>
                     <a className='text-center block m-1 p-1'>교환, 반품 신청</a>
@@ -64,9 +63,9 @@ function OrderList({data}:{data:Order}){
         <div className='p-3 rounded-xl my-3 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
             <span className='flex justify-between'>
                 <a className='block text-xl font-bold'>{data.created_date} 주문</a>
-                <a className='text-blue-500 block' href={`/order/${data.order_number}`}>주문 상세 보기&gt;</a>
+                <Link className='text-blue-500 block' href={`/order/${data.order_number}`}>주문 상세 보기&gt;</Link>
             </span>
-            {data.order_items.map((e)=><OrderItem orderItem={e} key={e.order_id}></OrderItem>)}
+            {data.order_items.map((e)=><OrderItem orderItem={e} key={e.order_item_num}></OrderItem>)}
 
         </div>
     )
@@ -75,7 +74,6 @@ function OrderList({data}:{data:Order}){
 export default function page() {
     const datas:Order[] = [
         {
-            num:1,
             order_number:'111',
             total_price: 1000,
             order_address: "강남 프로그래머스",
@@ -83,8 +81,8 @@ export default function page() {
             created_date:"2025. 07. 16",
             order_items:[
                 {
-                    order_id: 1,
-                    dilivery_state: "배송중",
+                    order_item_num: 1,
+                    delivery_state: "배송중",
                     product_name: "스타버구 블렌드1",
                     product_eng_name: "Starbu9 Blend1",
                     price: 20000,
@@ -92,8 +90,8 @@ export default function page() {
                     count:1
                   },
                   {
-                    order_id: 2,
-                    dilivery_state: "배송중",
+                    order_item_num: 2,
+                    delivery_state: "배송중",
                     product_name: "스타버구 블렌드2",
                     product_eng_name: "Starbu9 Blend2",
                     price: 20000,
@@ -101,8 +99,8 @@ export default function page() {
                     count:1
                   },
                   {
-                    order_id: 3,
-                    dilivery_state: "배송중",
+                    order_item_num: 3,
+                    delivery_state: "배송중",
                     product_name: "스타버구 블렌드3",
                     product_eng_name: "Starbu9 Blend3",
                     price: 20000,
@@ -110,8 +108,8 @@ export default function page() {
                     count:1
                   },
                   {
-                    order_id: 4,
-                    dilivery_state: "배송중",
+                    order_item_num: 4,
+                    delivery_state: "배송중",
                     product_name: "스타버구 블렌드4",
                     product_eng_name: "Starbu9 Blend4",
                     price: 20000,
@@ -121,7 +119,6 @@ export default function page() {
             ]
         },
         {
-            num:2,
             order_number:'1233',
             total_price: 4000,
             order_address: "내 집",
@@ -129,8 +126,8 @@ export default function page() {
             created_date:"2025. 07. 15",
             order_items:[
                 {
-                    order_id: 1,
-                    dilivery_state: "배송중",
+                    order_item_num: 1,
+                    delivery_state: "배송중",
                     product_name: "스타버구 블렌드1",
                     product_eng_name: "Starbu9 Blend1",
                     price: 20000,
@@ -138,8 +135,8 @@ export default function page() {
                     count:1
                   },
                   {
-                    order_id: 2,
-                    dilivery_state: "배송중",
+                    order_item_num: 2,
+                    delivery_state: "배송중",
                     product_name: "스타버구 블렌드2",
                     product_eng_name: "Starbu9 Blend2",
                     price: 20000,
@@ -159,7 +156,7 @@ export default function page() {
             </div>
             <div className='flex justify-center mt-3'>
                 <ul>
-                    {datas.map((e)=><OrderList data={e} key={e.num}></OrderList>)}
+                    {datas.map((e)=><OrderList data={e} key={e.order_number}></OrderList>)}
                 </ul>
             </div>
         </div>
