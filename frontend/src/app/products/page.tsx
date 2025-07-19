@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Product } from "../../lib/type/product";
-import ProductList from "@/commponents/ProductList";
-import ProductInfo from "@/commponents/ProductInfo";
+import ProductList from "@/components/ProductList";
+import ProductInfo from "@/components/ProductInfo";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]); //상품 목록
-  const [selectedProd, setSelectedProd] = useState<Product | null>(null); //상품 상세 내용
-  const [quantity, setQuantity] = useState<number>(1);
+  const [selectedProd, setSelectedProd] = useState<Product | null>(null); //상품 상세 내용(선택된 상품 매개변수로 넘김)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -21,17 +20,6 @@ export default function Page() {
     fetchProducts();
   }, []);
 
-  const increase = () => {
-    setQuantity(quantity + 1);
-  };
-  const decrease = () => {
-    if (quantity == 1) {
-      alert("최소 주문 수량은 1개 입니다.");
-      return;
-    }
-    setQuantity(quantity - 1);
-  };
-
   return (
     <>
       <ProductList products={products} onSelect={setSelectedProd} />
@@ -39,9 +27,6 @@ export default function Page() {
         <ProductInfo
           product={selectedProd}
           onClose={() => setSelectedProd(null)}
-          quantity={quantity}
-          increase={increase}
-          decrease={decrease}
         />
       )}
     </>
