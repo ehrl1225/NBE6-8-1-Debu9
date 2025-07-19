@@ -26,15 +26,13 @@ function Order({order, refreshOrders}:{order:OrderResponseDto, refreshOrders:()=
         <div className="border p-2 my-2 rounded-xl">
             <p>주문 번호 : {order.order_number}</p>
             <p>주소 : {order.order_address}</p>
-            <p>총 가격 : {order.total_price}</p>
+            <p>총 가격 : {order.total_price}원</p>
             <div className="border p-2">
                 {order.order_items!.map((e)=><OrderItem orderItem={e} key={e.orderItem_id}></OrderItem>)}
 
-            </div>
-            <div className="flex justify-between mt-3">
-                <button className="cursor-pointer">수정</button>
-                <button className="cursor-pointer" onClick={onDelete}>삭제</button>
-            </div>
+            </div>    
+            <button className="cursor-pointer flex justify-self-end mt-3" onClick={onDelete}>삭제</button>
+            
         </div>
     )
 }
