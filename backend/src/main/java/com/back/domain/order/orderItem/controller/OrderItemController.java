@@ -1,9 +1,11 @@
 package com.back.domain.order.orderItem.controller;
 
+import com.back.domain.member.member.service.MemberService;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.order.orderItem.dto.OrderItemDto;
 import com.back.domain.order.orderItem.entity.OrderItem;
+import com.back.domain.order.orderItem.service.OrderItemService;
 import com.back.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +25,8 @@ import java.util.List;
 @Tag( name = "OrderItemController", description = "API 주문 아이템 컨트롤러")
 public class OrderItemController {
     private final OrderService orderService;
+    private final OrderItemService orderItemService;
+    private final MemberService memberService;
 
     @GetMapping
     @Transactional(readOnly = true)
@@ -38,7 +42,6 @@ public class OrderItemController {
                 .map(OrderItemDto::new)
                 .toList();
     }
-
 
     record OrderItemsModifyReqBody(
             @NotNull

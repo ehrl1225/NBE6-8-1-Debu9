@@ -6,7 +6,8 @@ import com.back.domain.order.order.dto.OrderDto;
 import com.back.domain.order.order.dto.OrderResponseDto;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
-import com.back.domain.order.orderItem.dto.OrderItemDto;
+import com.back.domain.order.order.dto.DeliveryDto;
+import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.domain.order.orderItem.service.OrderItemService;
 import com.back.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,6 +41,16 @@ public class OrderController {
                 .stream()
                 .map(OrderResponseDto::new)
                 .toList();
+    }
+
+    @GetMapping("/{orderitem_id}/delivery-schedule")
+    @Transactional(readOnly = true)
+    @Operation(summary = "배송일정 조회")
+    public DeliveryDto getDeliverySchedule(@PathVariable int orderitem_id) {
+        System.out.println("ok");
+        OrderItem orderItem=orderService.getOrderItem(orderitem_id);
+
+        return new DeliveryDto(orderItem);
     }
 
     @GetMapping("/{orderNum}")
@@ -108,33 +118,6 @@ public class OrderController {
         );
     }
 
-
-    @GetMapping("/{orderNum}/delivery-schedule")
-    @Transactional(readOnly = true)
-    @Operation(summary = "배송일정 조회")
-    public RsData<Map<String, Object>> getDeliverySchedule(@PathVariable int orderNum) {
-
-        Order order = orderService.findByOrderNumWithDetails(orderNum)
-                .orElseThrow(() -> new RuntimeException("주문번호 %d에 해당하는 주문을 찾을 수 없습니다.".formatted(orderNum)));
-
-        List<OrderItemDto> deliverySchedule = order.getItems().stream()
-                .map(OrderItemDto::new)
-                .toList();
-
-        Map<String, Object> response = Map.of(
-                "orderNum", order.getOrderNum(),
-                "email", order.getUser().getEmail(),
-                "address", order.getAddress(),
-                "orderItems", deliverySchedule
-        );
-
-        return new RsData<>(
-                "200-1",
-                "배송일정 조회",
-                response
-        );
-    }
-
     @DeleteMapping("/{id}")
     @Transactional
     @Operation(summary = "주문 삭제")
@@ -146,5 +129,6 @@ public class OrderController {
             return "주문을 찾을 수 없습니다.";
         }
     }
+
 
 }
