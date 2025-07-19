@@ -21,7 +21,7 @@ export default function Page() {
   }, []);
 
   return (
-    <>
+    <div className="text-black">
       <ProductList products={products} onSelect={setSelectedProd} />
       {selectedProd && (
         <ProductInfo
@@ -29,6 +29,6 @@ export default function Page() {
           onClose={() => setSelectedProd(null)}
         />
       )}
-    </>
+    </div>
   );
 }
