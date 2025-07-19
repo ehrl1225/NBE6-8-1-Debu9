@@ -3,22 +3,44 @@
 import { useEffect, useState } from "react"
 import type {components} from "@/lib/backend/apiV1/schema"
 
-type ProductDto = components["schemas"]["ProductDto"]
+type ProductDto = components["schemas"]["ProductDto"];
+type ProductReqBody = components["schemas"]["ProductReqBody"];
 
 function safeParseInt(str: string): number {
     const num = parseInt(str, 10);
     return isNaN(num) ? 0 : num;
   }
 
-function Product({product}:{product:ProductDto}){
+function Product({product, refreshData}:{product:ProductDto, refreshData:()=>void}){
     const [bean, setBean] = useState<ProductDto>(product);
-
-    const onModify = () => {
-        
+    
+    const onModify = async() => {
+        const url = `http://localhost:8080/api/products/${bean.id}`;
+        const data:ProductReqBody = {
+            name:bean.name!,
+            imageUrl:bean.imageUrl!,
+            info:bean.info!,
+            price:bean.price!,
+            engName:bean.engName!
+        };
+        const res = await fetch(url, {
+            method:"PUT",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(data)
+        });
     }
 
-    const onDelete = () => {
-        
+    const onDelete = async () => {
+        const url = `http://localhost:8080/api/products/${bean.id}`;
+        const res = await fetch(url, {
+            method:"DELETE",
+            headers:{
+                "Content-Type":"application/json"
+            },
+        })
+        refreshData()
     }
 
     return (
@@ -44,25 +66,43 @@ function Product({product}:{product:ProductDto}){
 
 export default function(){
     const [products, setProducts] = useState<ProductDto[]>([])
-    useEffect( ()=> {
-        (async () => {
-            const url = "http://localhost:8080/api/products";
-            const res = await fetch(url);
-            const data = await res.json();
-            setProducts(data);
-        })()
+    const refreshData = async () => {
+        const url = "http://localhost:8080/api/products";
+        const res = await fetch(url);
+        const data = await res.json();
+        setProducts(data);
+    }
 
+    useEffect( ()=> {
+        refreshData()
     }, []);
 
     const onAdd = () => {
-        
+        (async ()=>{
+            const url:string = "http://localhost:8080/api/products";
+            const data:ProductReqBody = {
+                name:"예시 상품",
+                imageUrl:"/images/logo.png",
+                info:"예시 상품입니다.",
+                price:0,
+                engName:"example product"
+            };
+            const res = await fetch(url, {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(data)
+            });
+            refreshData();
+        })()
     }
 
     return (
         <div className="text-black flex justify-center mt-10">
             <div>
-                <button className="cursor-pointer flex justify-self-end border rounded p-2" onClick={()=>{}}>추가</button>
-                {products.map((e)=><Product product={e} key={e.id}></Product>)}
+                <button className="cursor-pointer flex justify-self-end border rounded p-2" onClick={onAdd}>추가</button>
+                {products.map((e)=><Product product={e} refreshData={refreshData} key={e.id}></Product>)}
             </div>
         </div>
     )
