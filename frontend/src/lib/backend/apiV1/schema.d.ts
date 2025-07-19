@@ -278,6 +278,20 @@ export interface components {
       address?: string;
     };
 
+    RsDeliveryDto: {
+      resultCode?: string;
+      msg?: string;
+      data: DeliveryDto;
+    };
+
+    DeliveryDto: {
+      orderNum: number;
+      email: string;
+      address: string;
+      expectedDeliveryDate: string;
+      deliveryState: string;
+    };
+
     RsDataListOrderItemDto: {
       resultCode?: string;
       msg?: string;
