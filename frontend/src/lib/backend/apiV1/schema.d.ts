@@ -274,6 +274,22 @@ export interface components {
       /** Format: date-time */
       expectedDeliveryDate?: string;
       deliveryState?: string;
+      email?: string;
+      address?: string;
+    };
+
+    RsDeliveryDto: {
+      resultCode?: string;
+      msg?: string;
+      data: DeliveryDto;
+    };
+
+    DeliveryDto: {
+      orderNum: number;
+      email: string;
+      address: string;
+      expectedDeliveryDate: string;
+      deliveryState: string;
     };
 
     RsDataListOrderItemDto: {

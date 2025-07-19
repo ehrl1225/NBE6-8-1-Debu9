@@ -66,4 +66,9 @@ public class OrderService {
     public void flush() {
         orderRepository.flush();
     }
+
+    @Transactional
+    public OrderItem getOrderItem(int OrderItem_Id){
+        return orderItemRepository.findById(OrderItem_Id).orElse(null);
+    }
 }
