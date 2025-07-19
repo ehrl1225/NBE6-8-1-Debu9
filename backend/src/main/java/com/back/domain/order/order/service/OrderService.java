@@ -39,10 +39,6 @@ public class OrderService {
         return NumberGenerator.generateRandomNumber(6);
     }
 
-    public List<OrderItem> getOrderItemsByOrderId(int orderId) {
-        return orderItemRepository.findByOrderId(orderId);
-    }
-
     public boolean delete(int id) {
         if (orderRepository.existsById(id)) {
             orderRepository.deleteById(id);

@@ -7,7 +7,6 @@ import com.back.domain.order.order.dto.OrderResponseDto;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.order.orderItem.dto.OrderItemDto;
-import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.domain.order.orderItem.service.OrderItemService;
 import com.back.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -112,12 +112,21 @@ public class OrderController {
     @GetMapping("/{orderId}/delivery-schedule")
     @Transactional(readOnly = true)
     @Operation(summary = "배송일정 조회")
-    public RsData<List<OrderItemDto>> getDeliverySchedule(@PathVariable int orderId) {
-        List<OrderItem> orderItems = orderService.getOrderItemsByOrderId(orderId);
+    public RsData<List<OrderItemDto>> getDeliverySchedule(@PathVariable int orderNum) {
 
-        List<OrderItemDto> deliverySchedule = orderItems.stream()
+        Order order = orderService.findByOrderNumWithDetails(orderNum)
+                .orElseThrow(() -> new RuntimeException("주문번호 %d에 해당하는 주문을 찾을 수 없습니다.".formatted(orderNum)));
+
+        List<OrderItemDto> deliverySchedule = order.getItems().stream()
                 .map(OrderItemDto::new)
                 .toList();
+
+        Map<String, Object> response = Map.of(
+                "orderNum", order.getOrderNum(),
+                "email", order.getUser().getEmail(),
+                "address", order.getAddress(),
+                "orderItems", deliverySchedule
+        );
 
         return new RsData<>(
                 "200-1",
