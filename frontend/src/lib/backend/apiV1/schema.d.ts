@@ -274,6 +274,8 @@ export interface components {
       /** Format: date-time */
       expectedDeliveryDate?: string;
       deliveryState?: string;
+      email?: string;
+      address?: string;
     };
 
     RsDataListOrderItemDto: {
