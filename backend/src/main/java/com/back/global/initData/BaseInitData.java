@@ -6,6 +6,7 @@ import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.product.product.entity.Product;
 import com.back.domain.product.product.service.ProductService;
+import com.back.global.util.NumberGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Configuration
@@ -48,17 +50,22 @@ public class BaseInitData {
     public void work2(List<Product> products) { // 2. Product 리스트를 파라미터로 받도록 변경
         if (orderService.count() > 0) return;
 
-        // 3. 하드코딩된 ID 대신 실제 Product 객체의 ID를 사용
-        Member user1 = memberService.findById(1).orElseThrow(() -> new IllegalArgumentException("User with ID 1 does not exist."));
-        Member user2 = memberService.findById(2).orElseThrow(() -> new IllegalArgumentException("User with ID 2 does not exist."));
-        Member user3 = memberService.findById(3).orElseThrow(() -> new IllegalArgumentException("User with ID 3 does not exist."));
-        Order order1 = orderService.write(user1, products.get(0).getId(), "서울시 강남구 역삼동");
-        Order order2 = orderService.write(user2, products.get(1).getId(), "대전광역시 동구 자양동");
-        Order order3 = orderService.write(user3, products.get(2).getId(), "부산광역시 해운대구 우동");
+        Member user1 = memberService.write("aaa@naver.com");
+        Member user2 = memberService.write("bbb@gmail.com");
+        Member user3 = memberService.write("ccc@programers.com");
 
-        order1.addItem(products.get(0), 2, null, "상품 준비 중");
-        order1.addItem(products.get(1), 1, null, "배송중");
-        order2.addItem(products.get(1), 3, null, "배송완료");
+        user1 = memberService.findById(1).orElseThrow(() -> new IllegalArgumentException("User with ID 1 does not exist."));
+        user2 = memberService.findById(2).orElseThrow(() -> new IllegalArgumentException("User with ID 2 does not exist."));
+        user3 = memberService.findById(3).orElseThrow(() -> new IllegalArgumentException("User with ID 3 does not exist."));
+
+        Order order1 = orderService.write(user1, NumberGenerator.generateRandomNumber(6), "서울시 강남구 역삼동");
+        Order order2 = orderService.write(user2, NumberGenerator.generateRandomNumber(6), "대전광역시 동구 자양동");
+        Order order3 = orderService.write(user3, NumberGenerator.generateRandomNumber(6), "부산광역시 해운대구 우동");
+
+        order1.addItem(products.get(0), 2, LocalDateTime.now().plusDays(3), "상품 준비 중");
+        order1.addItem(products.get(1), 1, LocalDateTime.now().plusDays(2), "배송중");
+        order2.addItem(products.get(1), 3, LocalDateTime.now(), "배송완료");
+        order3.addItem(products.get(2), 1, LocalDateTime.now().plusDays(4), "입금 확인 중");
     }
 
     @Transactional

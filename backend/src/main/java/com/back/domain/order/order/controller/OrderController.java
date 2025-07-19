@@ -3,13 +3,13 @@ package com.back.domain.order.order.controller;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import com.back.domain.order.order.dto.OrderDto;
+import com.back.domain.order.order.dto.OrderResponseDto;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.order.orderItem.dto.OrderItemDto;
 import com.back.domain.order.orderItem.entity.OrderItem;
 import com.back.domain.order.orderItem.service.OrderItemService;
 import com.back.global.rsData.RsData;
-import com.back.global.util.UUIDToInt;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,24 +33,36 @@ public class OrderController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    @Operation(summary = "주문 다건 조회")
-    public List<OrderDto> getItems() {
-        List<Order> items = orderService.findAll();
+    @Operation(summary = "주문 전체 조회")
+    public List<OrderResponseDto> getItems() {
+        List<Order> items = orderService.findAllWithItemsAndProducts();
 
         return items
                 .stream()
-                .map(OrderDto::new) // OrderDto로 변환
+                .map(OrderResponseDto::new)
                 .toList();
     }
 
     @GetMapping("/{orderNum}")
     @Transactional(readOnly = true)
     @Operation(summary = "주문번호로 단건 조회")
-    public OrderDto getItem(@PathVariable int orderNum) {
-        Order order = orderService.findByOrderNum(orderNum)
+    public OrderResponseDto getItem(@PathVariable int orderNum) {
+        Order order = orderService.findByOrderNumWithDetails(orderNum)
                 .orElseThrow(() -> new RuntimeException("주문번호 %s에 해당하는 주문을 찾을 수 없습니다.".formatted(orderNum)));
 
-        return new OrderDto(order);
+        return new OrderResponseDto(order);
+    }
+
+    // email로 조회
+    @GetMapping("/search")
+    @Transactional(readOnly = true)
+    @Operation(summary = "이메일로 주문 조회")
+    public List<OrderResponseDto> getItemsByEmail(@RequestParam String memberEmail) { // @RequestParam 사용
+        List<Order> orders = orderService.findAllByMemberEmail(memberEmail);
+
+        return orders.stream()
+                .map(OrderResponseDto::new)
+                .toList();
     }
 
     record OrderItemWriteReqBody(
@@ -77,7 +89,7 @@ public class OrderController {
     public RsData<OrderDto> write(@Valid @RequestBody OrderWriteReqBody reqBody) {
         Optional<Member> nullable_actor = memberService.findByEmail(reqBody.email);
         Member actor = nullable_actor.orElseGet(() -> memberService.save(reqBody.email));
-        int orderNum = orderService.generateUniqueOrderNum();
+        int orderNum = orderService.generateUniqueNum();
         Order order = orderService.write(actor, orderNum, reqBody.address);
 
         reqBody.items.stream()
@@ -91,7 +103,7 @@ public class OrderController {
                 ).toList();
         return new RsData<>(
                 "201-1",
-                "%d번 글이 작성되었습니다.".formatted(order.getId()),
+                "%d번 주문이 생성되었습니다.".formatted(order.getId()),
                 new OrderDto(order)
         );
     }
