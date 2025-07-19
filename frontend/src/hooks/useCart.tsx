@@ -51,6 +51,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       return prev;
     });
+    alert("장바구니에 담겼습니다.");
   };
 
   const isAllSelected =

@@ -39,9 +39,11 @@ public class BaseInitData {
     public List<Product> work1() { // 1. 생성된 Product 리스트를 반환하도록 변경
         if (productService.count() > 0) return productService.findAll();
 
-        Product product1 = productService.write("상품1", "이미지1.jpg", "상품1 정보", 10000, "상품1 영문명");
-        Product product2 = productService.write("상품2", "이미지2.jpg", "상품2 정보", 20000, "상품2 영문명");
-        Product product3 = productService.write("상품3", "이미지3.jpg", "상품3 정보", 30000, "상품3 영문명");
+        Product product1 = productService.write("스타버구 블렌드1", " /images/starbu9_blend1.png", " 스타버구 블렌드1은 과일 향과 꽃향기가 조화를 이루는 고급스러운 커피입니다. 깔끔한 산미와 은은한 단맛이 입안 가득 퍼지며, 가벼운 바디감으로 아침에 마시기 좋은 커피로 사랑받고 있습니다.", 10000, "Starbu9 Blend1");
+        Product product2 = productService.write("스타버구 블렌드2", " /images/starbu9_blend2.png", " 스타버구 블렌드2는  균형 잡힌 맛과 부드러운 질감이 특징입니다. 초콜릿과 견과류의 고소함이 은은하게 느껴지고, 중간 정도의 산미와 풍부한 바디감이 조화를 이뤄 어느 때나 부담 없이 즐기기 좋습니다.", 20000, "Starbu9 Blend2");
+        Product product3 = productService.write("스타버구 블렌드3",  "/images/starbu9_blend3.png", " 스타버구 블렌드3은 묵직한 바디감과 고소한 맛이 돋보이는 커피입니다. 캐러멜과 견과류의 풍미가 깊게 느껴지며, 쓴맛이 적고 부드러운 마무리로 남녀노소 모두에게 인기가 높습니다.",30000, "Starbu9 Blend3");
+        Product product4 = productService.write("스타버구 블렌드4",  "/images/starbu9_blend4.png", "스타버구 블렌드4는 스모키하면서도 과일 향이 조화롭게 어우러진 커피입니다. 복합적인 맛과 중간에서 묵직한 바디감, 그리고 깔끔한 산미가 특징이며, 진한 에스프레소나 드립 커피 모두 잘 어울립니다."
+                , 40000, "Starbu9 Blend4");
 
         return List.of(product1, product2, product3);
     }
