@@ -109,10 +109,10 @@ public class OrderController {
     }
 
 
-    @GetMapping("/{orderId}/delivery-schedule")
+    @GetMapping("/{orderNum}/delivery-schedule")
     @Transactional(readOnly = true)
     @Operation(summary = "배송일정 조회")
-    public RsData<List<OrderItemDto>> getDeliverySchedule(@PathVariable int orderNum) {
+    public RsData<Map<String, Object>> getDeliverySchedule(@PathVariable int orderNum) {
 
         Order order = orderService.findByOrderNumWithDetails(orderNum)
                 .orElseThrow(() -> new RuntimeException("주문번호 %d에 해당하는 주문을 찾을 수 없습니다.".formatted(orderNum)));
@@ -131,7 +131,7 @@ public class OrderController {
         return new RsData<>(
                 "200-1",
                 "배송일정 조회",
-                deliverySchedule
+                response
         );
     }
 
