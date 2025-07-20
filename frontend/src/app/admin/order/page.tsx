@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react"
 import type {components} from "@/lib/backend/apiV1/schema"
 
-type OrderResponseDto = components["schemas"]["OrderResponseDto"]
-type OrderItemResponseDto = components["schemas"]["OrderItemResponseDto"]
+type OrderResponseDto = components["schemas"]["OrderResponseDto"];
+type OrderItemResponseDto = components["schemas"]["OrderItemResponseDto"];
+type OrderUpdateReqBody = components["schemas"]["OrderUpdateReqBody"];
+type OrderItemUpdateReqBody = components["schemas"]["OrderItemUpdateReqBody"]
 
 function OrderItem({orderItem}:{orderItem:OrderItemResponseDto}){
+    const [oi, setOi] = useState<OrderItemResponseDto>(orderItem);
     return (
         <div className="border my-2">
             <p>{orderItem.product_name} {orderItem.count}개</p>
@@ -15,6 +18,24 @@ function OrderItem({orderItem}:{orderItem:OrderItemResponseDto}){
 }
 
 function Order({order, refreshOrders}:{order:OrderResponseDto, refreshOrders:()=>void}){
+    const [o, setO] = useState<OrderResponseDto>(order);
+    // const onModify = async () => {
+    //     const url = "http://localhost:8080/api/orders"
+    //     const data:OrderUpdateReqBody = {
+    //         orderNum:o.order_number!,
+    //         address:o.order_address!,
+    //         items:order.order_items!.map((e)=>{
+    //             return {
+                    
+    //             };
+    //         })
+
+    //     }
+    //     const res = await fetch(url,{
+    //         method:"PUT",
+    //         body: JSON.stringify({})
+    //     })
+    // }
     const onDelete = async () => {
         const url = `http://localhost:8080/api/orders/${order.order_id}`
         const res = await fetch(url,{
