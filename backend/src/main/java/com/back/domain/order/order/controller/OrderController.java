@@ -4,6 +4,7 @@ import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import com.back.domain.order.order.dto.OrderDto;
 import com.back.domain.order.order.dto.OrderResponseDto;
+import com.back.domain.order.order.dto.OrderUpdateReqBody;
 import com.back.domain.order.order.entity.Order;
 import com.back.domain.order.order.service.OrderService;
 import com.back.domain.order.order.dto.DeliveryDto;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -93,6 +95,7 @@ public class OrderController {
     }
 
 
+
     @PostMapping
     @Transactional
     @Operation(summary = "주문 생성")
@@ -113,8 +116,19 @@ public class OrderController {
                 ).toList();
         return new RsData<>(
                 "201-1",
-                "%d번 주문이 생성되었습니다.".formatted(order.getId()),
+                "%d번 주문이 생성되었습니다.".formatted(order.getOrderNum()),
                 new OrderDto(order)
+        );
+    }
+
+    @PutMapping
+    @Operation(summary = "주문 수정")
+    public RsData<OrderDto> update(@Valid @RequestBody OrderUpdateReqBody reqBody) {
+        orderService.updateOrder(reqBody);
+
+        return new RsData<>(
+                "201-1",
+                "%d번 주문이 수정되었습니다.".formatted(reqBody.orderNum())
         );
     }
 

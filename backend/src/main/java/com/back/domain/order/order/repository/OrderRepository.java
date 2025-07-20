@@ -25,5 +25,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "JOIN FETCH o.user m " +
             "WHERE o.orderNum = :orderNum")
     Optional<Order> findByOrderNumWithDetails(@Param("orderNum") int orderNum);
+
+    Optional<Order> findByOrderNum(int orderNum);
 }
 

@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Order extends BaseEntity {
     private Member user;
     @Column(unique = true, nullable = false)
     private int orderNum;
+    @Setter
     private String address;
 
     @OneToMany(mappedBy = "order", fetch = LAZY, cascade = {PERSIST, REMOVE}, orphanRemoval = true)
