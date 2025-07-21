@@ -253,8 +253,12 @@ export interface components {
             /** Format: int32 */
             orderItem_id?: number;
             delivery_state?: string;
+            /** Format: int32 */
+            product_id?: number;
             product_name?: string;
             product_eng_name?: string;
+            /** Format: date-time */
+            expectedDeliveryDate?: string;
             /** Format: int32 */
             price?: number;
             image_url?: string;
